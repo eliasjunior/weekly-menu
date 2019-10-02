@@ -4,10 +4,16 @@ import java.util.List;
 import com.weeklyMenu.inventory.dto.ProductDTO;
 
 /**
- * ProductDataAccess
+ * ProductDataAccess is the abstract data access, from the domain layer 
  */
 public interface ProductDataAccess {
     List<ProductDTO> getAllProducts();
 
     ProductDTO save(ProductDTO product);
+
+	void update(ProductDTO dto);
+
+    void delete(Long id);
+    
+    ProductDTO getProduct(Long id);
 }

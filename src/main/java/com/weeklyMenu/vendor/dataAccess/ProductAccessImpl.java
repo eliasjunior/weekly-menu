@@ -36,4 +36,22 @@ public class ProductAccessImpl implements ProductDataAccess {
         Product entity = productRepository.save(ProductMapper.dtoToEntity(dto));
         return ProductMapper.entityToDTO(entity);
     }
+
+    @Override
+    public void update(ProductDTO dto) {
+        productRepository.save(ProductMapper.dtoToEntity(dto));
+    }
+
+    @Override
+    public void delete(Long id) {
+        productRepository.deleteById(id.toString());
+    }
+
+    @Override
+    public ProductDTO getProduct(Long id) {
+        //TODO: validation on domain layer;
+        ProductDTO dto = ProductMapper
+            .entityToDTO(productRepository.findById(id.toString()).get());
+        return dto;
+    }
 }

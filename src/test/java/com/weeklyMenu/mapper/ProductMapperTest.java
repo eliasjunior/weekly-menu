@@ -19,6 +19,6 @@ public class ProductMapperTest {
 
         ProductMapper.dtoToEntity(dto);
         assertEquals(dto.getName(), "Ema");
-        assertEquals(dto.getId(), "123");
+        assertEquals(dto.getId(), new Long(123));
     }
 }
