@@ -17,6 +17,7 @@ public class GetProducts {
     }
 
     public ProductDTO getProduct(Long id) {
+        // TODO maybe change to Objects.requireNonNull
         if(id == null) {
             //TODO: internationalization
             throw new RuntimeException("Id product cannot be null");
