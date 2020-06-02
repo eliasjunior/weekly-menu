@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ProductRepository extends JpaRepository<Product, String>{
   List<Product> findAll();
+
+  Product findByName(String name);
 }

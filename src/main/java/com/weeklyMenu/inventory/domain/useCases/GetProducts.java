@@ -3,13 +3,17 @@ package com.weeklyMenu.inventory.domain.useCases;
 import java.util.List;
 
 import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
+import com.weeklyMenu.inventory.domain.data.ProductInputBoundary;
 import com.weeklyMenu.inventory.dto.ProductDTO;
 
+//TODO on hold, I'll create use case for cases more complex
 public class GetProducts {
-    final ProductDataAccess dataAccess;
+    private final ProductDataAccess dataAccess;
+    final ProductInputBoundary inputData;
 
-    public GetProducts(ProductDataAccess dataAccess) {
+    public GetProducts(ProductDataAccess dataAccess, ProductInputBoundary inputData) {
         this.dataAccess = dataAccess;
+        this.inputData = inputData;
     }
 
     public List<ProductDTO> getAllProducts() {

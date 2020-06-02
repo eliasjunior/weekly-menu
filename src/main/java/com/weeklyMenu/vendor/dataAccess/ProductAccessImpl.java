@@ -54,4 +54,10 @@ public class ProductAccessImpl implements ProductDataAccess {
             .entityToDTO(productRepository.findById(id.toString()).get());
         return dto;
     }
+
+    @Override
+    public boolean isProductNameUsed(ProductDTO dto) {
+        Product product = productRepository.findByName(dto.getName());
+        return product != null;
+    }
 }

@@ -16,4 +16,6 @@ public interface ProductDataAccess {
     void delete(Long id);
     
     ProductDTO getProduct(Long id);
+
+    boolean isProductNameUsed(ProductDTO dto);
 }
