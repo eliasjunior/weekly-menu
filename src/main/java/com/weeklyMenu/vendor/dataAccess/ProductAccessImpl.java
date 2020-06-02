@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductAccessImpl implements ProductDataAccess {
     private final ProductRepository productRepository;
+    private ProductMapper MAPPER = ProductMapper.INSTANCE;
 
     ProductAccessImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -27,19 +28,19 @@ public class ProductAccessImpl implements ProductDataAccess {
         List<Product> products = productRepository.findAll();
         return products
             .stream()
-            .map(ProductMapper::entityToDTO)
+            .map(MAPPER::entityToDTO)
             .collect(Collectors.toList());
     }
 
     @Override
     public ProductDTO save(ProductDTO dto) {
-        Product entity = productRepository.save(ProductMapper.dtoToEntity(dto));
-        return ProductMapper.entityToDTO(entity);
+        Product entity = productRepository.save(MAPPER.dtoToEntity(dto));
+        return MAPPER.entityToDTO(entity);
     }
 
     @Override
     public void update(ProductDTO dto) {
-        productRepository.save(ProductMapper.dtoToEntity(dto));
+        productRepository.save(MAPPER.dtoToEntity(dto));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ProductAccessImpl implements ProductDataAccess {
     @Override
     public ProductDTO getProduct(Long id) {
         //TODO: validation on domain layer;
-        ProductDTO dto = ProductMapper
+        ProductDTO dto = MAPPER
             .entityToDTO(productRepository.findById(id.toString()).get());
         return dto;
     }
