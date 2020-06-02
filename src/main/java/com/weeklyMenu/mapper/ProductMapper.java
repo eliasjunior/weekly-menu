@@ -2,22 +2,19 @@ package com.weeklyMenu.mapper;
 
 import com.weeklyMenu.inventory.dto.ProductDTO;
 import com.weeklyMenu.vendor.model.Product;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-/**
- * ProductMapper
- */
-public class ProductMapper {
-    public static ProductDTO entityToDTO(Product entity) {
-        ProductDTO dto = new ProductDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        return dto;
-    }
+import java.util.List;
 
-    public static Product dtoToEntity(ProductDTO dto) {
-        Product entity = new Product();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        return entity;
-    }
+@Mapper
+public interface ProductMapper {
+
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+
+    ProductDTO entityToDTO(Product entity);
+
+    Product dtoToEntity(ProductDTO dto);
+
+    List<ProductDTO> entityToDTO(List<Product> products);
 }
