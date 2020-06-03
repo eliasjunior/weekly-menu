@@ -20,7 +20,7 @@ public class GetProducts {
         return this.dataAccess.getAllProducts();
     }
 
-    public ProductDTO getProduct(Long id) {
+    public ProductDTO getProduct(String id) {
         // TODO maybe change to Objects.requireNonNull
         if(id == null) {
             //TODO: internationalization

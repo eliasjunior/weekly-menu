@@ -1,12 +1,11 @@
 package com.weeklyMenu.inventory.controller;
 
-import java.util.List;
-
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
+import com.weeklyMenu.inventory.domain.data.CategoryDataAccess;
 import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
+import com.weeklyMenu.inventory.dto.CategoryDTO;
 import com.weeklyMenu.inventory.dto.ProductDTO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,48 +19,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//TODO should be into the vendor dir because the spring annotation
+import java.util.List;
+
 @RestController
-@RequestMapping(GlobalConstant.BASE_URL + "/product")
-public class ProductController {
-    final ProductDataAccess productDataAccess;
+@RequestMapping(GlobalConstant.BASE_URL + "/category")
+public class CategoryController {
+    final CategoryDataAccess categoryDataAccess;
     final Logger LOGGER;
 
     @Autowired
-    ProductController(ProductDataAccess productDataAccess) {
-        LOGGER = LoggerFactory.getLogger(ProductController.class);
-        this.productDataAccess = productDataAccess;
+    CategoryController(CategoryDataAccess categoryDataAccess) {
+        LOGGER = LoggerFactory.getLogger(CategoryController.class);
+        this.categoryDataAccess = categoryDataAccess;
     }
 
     @GetMapping
-    public List<ProductDTO> getProducts() {
-        LOGGER.info("--> getProducts");
-        return productDataAccess.getAllProducts();
+    public List<CategoryDTO> getCategorys() {
+        LOGGER.info("--> getCategorys");
+        return categoryDataAccess.getAllCategories();
     }
     @GetMapping("/{id}")
-    public ProductDTO getProduct(@PathVariable String id) {
-        LOGGER.info("--> getProduct {}", id);
-        return productDataAccess.getProduct(id);
+    public CategoryDTO getCategory(@PathVariable String id) {
+        LOGGER.info("--> getCategory {}", id);
+        return categoryDataAccess.getCategory(id);
     }
     @PostMapping
-    public ProductDTO create(@RequestBody ProductDTO dto) {
+    public CategoryDTO create(@RequestBody CategoryDTO dto) {
         LOGGER.info("--> save");
-        boolean isCreated = productDataAccess.isProductNameUsed(dto);
+        boolean isCreated = categoryDataAccess.isCategoryNameUsed(dto);
         if(!isCreated) {
-            return productDataAccess.save(dto);
+            return categoryDataAccess.save(dto);
         } else {
             throw new CustomValidationException("Name already exits ", new RuntimeException());
         }
     }
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody ProductDTO dto) {
+    public ResponseEntity<String> update(@RequestBody CategoryDTO dto) {
         LOGGER.info("--> update");
-        productDataAccess.update(dto);
+        categoryDataAccess.update(dto);
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping
     public ResponseEntity<String> delete(@PathVariable String id) {
-        productDataAccess.delete(id);
+        categoryDataAccess.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

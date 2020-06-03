@@ -2,10 +2,11 @@ package com.weeklyMenu.inventory.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class ProductDTO {
+public class CategoryDTO {
     private String id;
-    private String catId;
     private String name;
-    private String quantityType;
+    private List<ProductDTO> products;
 }

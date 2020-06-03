@@ -13,9 +13,9 @@ public interface ProductDataAccess {
 
 	void update(ProductDTO dto);
 
-    void delete(Long id);
+    void delete(String id);
     
-    ProductDTO getProduct(Long id);
+    ProductDTO getProduct(String id);
 
     boolean isProductNameUsed(ProductDTO dto);
 }

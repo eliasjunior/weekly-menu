@@ -23,7 +23,7 @@ public class ProductTest {
     public void shouldSaveProduct() {
         ProductDTO dto = new ProductDTO();
         dto.setName("name");
-        dto.setId(new Long(1));
+     //   dto.setId(new Long(1));
 
         List<ProductDTO> list = new ArrayList<>();
         list.add(dto);

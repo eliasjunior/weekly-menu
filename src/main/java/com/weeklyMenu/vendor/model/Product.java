@@ -18,19 +18,16 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 public class Product {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Long id;
+    private String id;
+
+    @Column(name = "CAT_ID")
+    private String catId;
 
     @Column(name = "NAME")
-    @NotBlank(message = "Name is mandatory")
     private String name;
 
     @Column(name = "QUANTITY_TYPE")
     private String quantityType;
-
-    @Column(name = "CAT_ID")
-    private Long catId;
 }
