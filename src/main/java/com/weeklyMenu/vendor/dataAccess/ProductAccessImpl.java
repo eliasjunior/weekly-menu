@@ -1,54 +1,49 @@
 package com.weeklyMenu.vendor.dataAccess;
 
-import java.util.List;
-
 import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.mapper.ProductMapper;
-import com.weeklyMenu.vendor.model.Product;
-import com.weeklyMenu.vendor.repository.ProductRepository;
 import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
 import com.weeklyMenu.inventory.dto.ProductDTO;
-
-import org.mapstruct.factory.Mappers;
+import com.weeklyMenu.mapper.InventoryMapper;
+import com.weeklyMenu.vendor.helper.IdGenerator;
+import com.weeklyMenu.vendor.model.Product;
+import com.weeklyMenu.vendor.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-/**
- * ProductAccessImpl
- */
 @Service
 public class ProductAccessImpl implements ProductDataAccess {
     private final ProductRepository productRepository;
-    private ProductMapper MAPPER = ProductMapper.INSTANCE;
+    private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
+    private IdGenerator idGenerator;
 
-    ProductAccessImpl(ProductRepository productRepository) {
+    ProductAccessImpl(ProductRepository productRepository, IdGenerator idGenerator) {
         this.productRepository = productRepository;
+        this.idGenerator = idGenerator;
     }
 
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return MAPPER.entityToDTO(products);
+        return MAPPER.listProductDtoToProduct(products);
     }
 
     @Override
     public ProductDTO save(ProductDTO dto) {
         if (dto.getId() == null) {
-            dto.setId(UUID.randomUUID().toString());
+            dto.setId(idGenerator.generateId());
         }
-        Product entity = productRepository.save(MAPPER.dtoToEntity(dto));
-        return MAPPER.entityToDTO(entity);
+        Product product = productRepository.save(MAPPER.productDtoToProduct(dto));
+        return MAPPER.productToProductDto(product);
     }
 
     @Override
     public void update(ProductDTO dto) {
         Optional<Product> optional = productRepository.findById(dto.getId());
-        if(!optional.isPresent()) {
+        if (!optional.isPresent()) {
             throw new CustomValidationException("Product not found to update", new RuntimeException());
         }
-        productRepository.save(MAPPER.dtoToEntity(dto));
+        productRepository.save(MAPPER.productDtoToProduct(dto));
     }
 
     @Override
@@ -59,7 +54,7 @@ public class ProductAccessImpl implements ProductDataAccess {
     @Override
     public ProductDTO getProduct(String id) {
         return MAPPER
-            .entityToDTO(productRepository.findById(id).get());
+                .productToProductDto(productRepository.findById(id).get());
     }
 
     @Override

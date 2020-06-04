@@ -3,9 +3,7 @@ package com.weeklyMenu.inventory.controller;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
 import com.weeklyMenu.inventory.domain.data.CategoryDataAccess;
-import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
 import com.weeklyMenu.inventory.dto.CategoryDTO;
-import com.weeklyMenu.inventory.dto.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +32,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryDTO> getCategorys() {
-        LOGGER.info("--> getCategorys");
+    public List<CategoryDTO> getCategories() {
+        LOGGER.info("--> getCategories");
         return categoryDataAccess.getAllCategories();
     }
     @GetMapping("/{id}")

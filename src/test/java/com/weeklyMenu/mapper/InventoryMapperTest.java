@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 
-public class ProductMapperTest {
+public class InventoryMapperTest {
 
     @Test
     public void entityToDTO() {
@@ -17,7 +17,7 @@ public class ProductMapperTest {
        // dto.setId(1l);
         dto.setName("Norris");
 
-        ProductMapper.INSTANCE.dtoToEntity(dto);
+        InventoryMapper.INSTANCE.productDtoToProduct(dto);
 
         assertNotNull(dto);
 //        assertThat( carDto.getMake() ).isEqualTo( "Morris" );
