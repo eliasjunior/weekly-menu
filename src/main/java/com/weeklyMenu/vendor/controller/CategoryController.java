@@ -1,4 +1,4 @@
-package com.weeklyMenu.inventory.controller;
+package com.weeklyMenu.vendor.controller;
 
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(GlobalConstant.BASE_URL + "/category")
+@RequestMapping(GlobalConstant.BASE_URL + "/categories")
 public class CategoryController {
     final CategoryDataAccess categoryDataAccess;
     final Logger LOGGER;

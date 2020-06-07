@@ -1,4 +1,4 @@
-package com.weeklyMenu.inventory.controller;
+package com.weeklyMenu.vendor.controller;
 
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
@@ -21,7 +21,7 @@ import java.util.List;
 
 //TODO should be into the vendor dir because the spring annotation
 @RestController
-@RequestMapping(GlobalConstant.BASE_URL + "/product")
+@RequestMapping(GlobalConstant.BASE_URL + "/products")
 public class ProductController {
     final ProductDataAccess productDataAccess;
     final Logger LOGGER;

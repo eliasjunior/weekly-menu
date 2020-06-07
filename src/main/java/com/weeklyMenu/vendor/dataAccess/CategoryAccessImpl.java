@@ -27,7 +27,12 @@ public class CategoryAccessImpl implements CategoryDataAccess {
 
     @Override
     public List<CategoryDTO> getAllCategories() {
-        return MAPPER.categoryToCategoryDto(categoryRepository.findAll());
+        List<CategoryDTO> catsDto = MAPPER.categoryToCategoryDto(categoryRepository.findAll());
+        List<CategoryDTO> withCatProds = catsDto
+                .stream()
+                .map(cat -> populateCatProds(cat))
+                .collect(Collectors.toList());
+        return withCatProds;
     }
 
     @Override
@@ -37,8 +42,8 @@ public class CategoryAccessImpl implements CategoryDataAccess {
         }
 
         //TODO move this later
-        if (categoryDTO.getCatProds() != null && categoryDTO.getCatProds().size() > 0) {
-            categoryDTO.setProducts(categoryDTO.getCatProds()
+        if (categoryDTO.getProdIds() != null && categoryDTO.getProdIds().size() > 0) {
+            categoryDTO.setProducts(categoryDTO.getProdIds()
                     .stream()
                     .map(prodId -> new ProductDTO(prodId))
                     .collect(Collectors.toList()));
@@ -71,5 +76,18 @@ public class CategoryAccessImpl implements CategoryDataAccess {
     public boolean isCategoryNameUsed(CategoryDTO dto) {
         Category category = categoryRepository.findByName(dto.getName());
         return category != null;
+    }
+
+    private CategoryDTO populateCatProds(CategoryDTO cat) {
+        try {
+            List<String> catProds = cat.getProducts()
+                    .stream()
+                    .map(prod -> prod.getId())
+                    .collect(Collectors.toList());
+            cat.setProdIds(catProds);
+            return cat;
+        } catch (Exception e) {
+            throw new CustomValidationException("Something went wrong while populating prod ids", e);
+        }
     }
 }
