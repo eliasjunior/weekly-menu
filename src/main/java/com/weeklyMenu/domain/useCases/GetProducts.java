@@ -1,10 +1,10 @@
-package com.weeklyMenu.inventory.domain.useCases;
+package com.weeklyMenu.domain.useCases;
 
 import java.util.List;
 
-import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
-import com.weeklyMenu.inventory.domain.data.ProductInputBoundary;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.domain.data.ProductInputBoundary;
+import com.weeklyMenu.dto.ProductDTO;
 
 //TODO on hold, I'll create use case for cases more complex
 public class GetProducts {

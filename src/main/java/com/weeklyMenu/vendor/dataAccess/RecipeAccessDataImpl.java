@@ -1,13 +1,15 @@
 package com.weeklyMenu.vendor.dataAccess;
 
+import com.weeklyMenu.domain.data.RecipeDataAccess;
+import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.inventory.domain.data.RecipeDataAccess;
-import com.weeklyMenu.inventory.dto.RecipeDto;
-import com.weeklyMenu.mapper.RecipeMapper;
 import com.weeklyMenu.vendor.helper.IdGenerator;
+import com.weeklyMenu.vendor.mapper.RecipeMapper;
 import com.weeklyMenu.vendor.model.ProdDetail;
+import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.ProdDetailRepository;
+import com.weeklyMenu.vendor.repository.ProductRepository;
 import com.weeklyMenu.vendor.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +20,15 @@ import java.util.Optional;
 public class RecipeAccessDataImpl implements RecipeDataAccess {
     private final RecipeRepository recipeRepository;
     private final ProdDetailRepository prodDetailRepository;
+    private final ProductRepository productRepository;
     private IdGenerator idGenerator;
     private final RecipeMapper MAPPER = RecipeMapper.INSTANCE;
 
     public RecipeAccessDataImpl(RecipeRepository recipeRepository,
-                                ProdDetailRepository prodDetailRepository, IdGenerator idGenerator) {
+                                ProdDetailRepository prodDetailRepository, ProductRepository productRepository, IdGenerator idGenerator) {
         this.recipeRepository = recipeRepository;
         this.prodDetailRepository = prodDetailRepository;
+        this.productRepository = productRepository;
         this.idGenerator = idGenerator;
     }
 
@@ -48,9 +52,15 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
         recipeDto.getProdsDetail().forEach(prodDetailDto -> {
             ProdDetail prodDetail = MAPPER.prodDetailDtoToProdDetail(prodDetailDto);
             prodDetail.setRecipe(recipe);
-            prodDetailRepository.save(prodDetail);
-        });
 
+            Optional<Product> product = productRepository.findById(prodDetail.getProdId());
+            if(product.isPresent()) {
+                prodDetailRepository.save(prodDetail);
+            } else {
+                String msgError = "Attempt to save Prod Detail of recipe "+ recipe.getName() +"but product does not exist";
+                throw new CustomValidationException(msgError);
+            }
+        });
         return MAPPER.recipeToRecipeDto(recipe);
     }
 

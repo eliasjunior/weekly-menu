@@ -1,4 +1,4 @@
-package com.weeklyMenu.inventory.dto;
+package com.weeklyMenu.dto;
 
 import lombok.Data;
 

@@ -1,10 +1,10 @@
 package com.weeklyMenu.vendor.dataAccess;
 
 import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.inventory.domain.data.CategoryDataAccess;
-import com.weeklyMenu.inventory.dto.CategoryDTO;
-import com.weeklyMenu.inventory.dto.ProductDTO;
-import com.weeklyMenu.mapper.InventoryMapper;
+import com.weeklyMenu.domain.data.CategoryDataAccess;
+import com.weeklyMenu.dto.CategoryDTO;
+import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.repository.CategoryRepository;

@@ -1,7 +1,7 @@
-package com.weeklyMenu.inventory.domain.data;
+package com.weeklyMenu.domain.data;
 
 
-import com.weeklyMenu.inventory.dto.CategoryDTO;
+import com.weeklyMenu.dto.CategoryDTO;
 
 import java.util.List;
 

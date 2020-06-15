@@ -2,8 +2,8 @@ package com.weeklyMenu.vendor.controller;
 
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
-import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.dto.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

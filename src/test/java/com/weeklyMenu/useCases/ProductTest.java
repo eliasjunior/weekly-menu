@@ -1,9 +1,8 @@
 package com.weeklyMenu.useCases;
 
-import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
-import com.weeklyMenu.inventory.domain.useCases.GetProducts;
-import com.weeklyMenu.inventory.domain.useCases.ManageProducts;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.domain.useCases.ManageProducts;
+import com.weeklyMenu.dto.ProductDTO;
 import org.junit.Test;
 import org.mockito.Mockito;
 

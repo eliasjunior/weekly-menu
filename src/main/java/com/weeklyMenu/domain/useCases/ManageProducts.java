@@ -1,7 +1,7 @@
-package com.weeklyMenu.inventory.domain.useCases;
+package com.weeklyMenu.domain.useCases;
 
-import com.weeklyMenu.inventory.domain.data.ProductDataAccess;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.dto.ProductDTO;
 
 /**
  * ManageProducts, use case product crud, domain layer

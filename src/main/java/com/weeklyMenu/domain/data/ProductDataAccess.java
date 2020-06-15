@@ -1,7 +1,7 @@
-package com.weeklyMenu.inventory.domain.data;
+package com.weeklyMenu.domain.data;
 
 import java.util.List;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDTO;
 
 /**
  * ProductDataAccess is the abstract data access, from the domain layer 

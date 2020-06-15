@@ -1,8 +1,8 @@
 package com.weeklyMenu.inventory;
 
-import com.weeklyMenu.inventory.dto.CategoryDTO;
-import com.weeklyMenu.inventory.dto.ProductDTO;
-import com.weeklyMenu.mapper.InventoryMapper;
+import com.weeklyMenu.dto.CategoryDTO;
+import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.dataAccess.CategoryAccessImpl;
 import com.weeklyMenu.vendor.dataAccess.ProductAccessImpl;
 import com.weeklyMenu.vendor.model.Category;

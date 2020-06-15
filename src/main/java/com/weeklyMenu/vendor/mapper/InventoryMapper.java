@@ -1,7 +1,7 @@
-package com.weeklyMenu.mapper;
+package com.weeklyMenu.vendor.mapper;
 
-import com.weeklyMenu.inventory.dto.CategoryDTO;
-import com.weeklyMenu.inventory.dto.ProductDTO;
+import com.weeklyMenu.dto.CategoryDTO;
+import com.weeklyMenu.dto.ProductDTO;
 import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.model.Product;
 import org.mapstruct.Mapper;
