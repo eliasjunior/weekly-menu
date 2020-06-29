@@ -2,7 +2,7 @@ package com.weeklyMenu.useCases;
 
 import com.weeklyMenu.domain.data.ProductDataAccess;
 import com.weeklyMenu.domain.useCases.ManageProducts;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDto;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -20,11 +20,11 @@ public class ProductTest {
 
     @Test
     public void shouldSaveProduct() {
-        ProductDTO dto = new ProductDTO();
+        ProductDto dto = new ProductDto();
         dto.setName("name");
      //   dto.setId(new Long(1));
 
-        List<ProductDTO> list = new ArrayList<>();
+        List<ProductDto> list = new ArrayList<>();
         list.add(dto);
 
         ProductDataAccess dataAccess = Mockito.mock(ProductDataAccess.class);

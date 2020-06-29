@@ -1,7 +1,12 @@
 package com.weeklyMenu.recipe;
 
+import com.weeklyMenu.BaseIntegration;
 import com.weeklyMenu.dto.ProdDetailDto;
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.dto.RecipeDto;
+import com.weeklyMenu.vendor.dataAccess.CartAccessDataImpl;
+import com.weeklyMenu.vendor.dataAccess.CategoryDataAccessImpl;
+import com.weeklyMenu.vendor.dataAccess.ProductDataAccessImpl;
 import com.weeklyMenu.vendor.dataAccess.RecipeAccessDataImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,19 +21,27 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RecipeTest {
+public class RecipeTest extends BaseIntegration  {
 
     @Autowired
-    private RecipeAccessDataImpl recipeAccessData;
+    CartAccessDataImpl cartAccessData;
+    @Autowired
+    private ProductDataAccessImpl productDataAccess;
+    @Autowired
+    RecipeAccessDataImpl recipeAccessData;
+    @Autowired
+    private CategoryDataAccessImpl catApiData;
 
     @Test
-    public void simpleCrud() {
+    public void basicCreation() {
+        ProductDto productDto = createProduct(catApiData, productDataAccess);
+
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setName("Greek Salad");
 
         ProdDetailDto prodDetailDto = new ProdDetailDto();
         prodDetailDto.setQuantity(2);
-        prodDetailDto.setProdId("prod1");
+        prodDetailDto.setProdId(productDto.getId());
 
 
         List<ProdDetailDto> prodsDetail = new ArrayList<>();

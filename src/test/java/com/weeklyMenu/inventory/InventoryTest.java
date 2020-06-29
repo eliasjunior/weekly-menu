@@ -1,14 +1,15 @@
 package com.weeklyMenu.inventory;
 
-import com.weeklyMenu.dto.CategoryDTO;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.BaseIntegration;
+import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.dto.CategoryDto;
+import com.weeklyMenu.dto.ProductDto;
+import com.weeklyMenu.vendor.dataAccess.CategoryDataAccessImpl;
+import com.weeklyMenu.vendor.dataAccess.ProductDataAccessImpl;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
-import com.weeklyMenu.vendor.dataAccess.CategoryAccessImpl;
-import com.weeklyMenu.vendor.dataAccess.ProductAccessImpl;
 import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.repository.CategoryRepository;
-import com.weeklyMenu.vendor.repository.ProductRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +20,22 @@ import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class InventoryTest {
+public class InventoryTest extends BaseIntegration {
+    @Autowired
+    private CategoryDataAccessImpl catDataApi;
 
     @Autowired
-    private ProductAccessImpl prodApiData;
-    @Autowired
-    private CategoryAccessImpl catApiData;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ProductRepository productRepository;
+    private ProductDataAccessImpl productDataApi;
 
     @Test
     public void testMapperDtoToEntity() {
         InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
-        CategoryDTO categoryDTO = new CategoryDTO();
+        CategoryDto categoryDTO = new CategoryDto();
         categoryDTO.setId(UUID.randomUUID().toString());
 
         System.out.println(inventoryMapper.categoryDtoToCategory(categoryDTO));
 
-        ProductDTO productDTO = new ProductDTO();
+        ProductDto productDTO = new ProductDto();
         productDTO.setName("Sugar");
         productDTO.setCatId(categoryDTO.getId());
         System.out.println("&&&&& --> #################");
@@ -64,28 +60,8 @@ public class InventoryTest {
 
     @Test
     public void simpleCrudInventory() {
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName("Fruits");
-        catApiData.save(categoryDTO);
-
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName("apple");
-        //  productDTO.setCategoryDTO(categoryDTO);
-
-        ProductDTO newProdDto = prodApiData.save(productDTO);
-
-        System.out.println("PROD --> #################");
-        for (Product product : productRepository.findAll()) {
-            System.out.println(product.getName());
-            //   System.out.println(product.getCategory());
-        }
-        System.out.println("CAT --> #################");
-        for (Category category : categoryRepository.findAll()) {
-            System.out.println(category.getName());
-            category.getProducts().forEach(product -> {
-                System.out.println("CHILDREN --> #################");
-                System.out.println(product.getName());
-            });
-        }
+        createProduct(catDataApi, productDataApi);
     }
+
+
 }

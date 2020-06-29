@@ -1,7 +1,7 @@
 package com.weeklyMenu.domain.useCases;
 
 import com.weeklyMenu.domain.data.ProductDataAccess;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDto;
 
 /**
  * ManageProducts, use case product crud, domain layer
@@ -13,11 +13,11 @@ public class ManageProducts {
         this.dataAccess = dataAccess;
     }
 
-    public ProductDTO create(ProductDTO product) {
+    public ProductDto create(ProductDto product) {
         return this.dataAccess.save(product);
     }
 
-    public void update(ProductDTO dto) {
+    public void update(ProductDto dto) {
         //TODO: validation here
         this.dataAccess.update(dto);
     }

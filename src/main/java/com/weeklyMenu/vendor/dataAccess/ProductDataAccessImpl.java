@@ -1,8 +1,8 @@
 package com.weeklyMenu.vendor.dataAccess;
 
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.domain.data.ProductDataAccess;
-import com.weeklyMenu.dto.ProductDTO;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.model.Product;
@@ -13,23 +13,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductAccessImpl implements ProductDataAccess {
+public class ProductDataAccessImpl implements ProductDataAccess {
     private final ProductRepository productRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
     private IdGenerator idGenerator;
+    private InventoryValidator inventoryValidator;
 
-    ProductAccessImpl(ProductRepository productRepository, IdGenerator idGenerator) {
+    ProductDataAccessImpl(ProductRepository productRepository,
+                          IdGenerator idGenerator,
+                          InventoryValidator inventoryValidator) {
         this.productRepository = productRepository;
         this.idGenerator = idGenerator;
+        this.inventoryValidator = inventoryValidator;
     }
 
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return MAPPER.listProductDtoToProduct(products);
     }
 
     @Override
-    public ProductDTO save(ProductDTO dto) {
+    public ProductDto save(ProductDto dto) {
+        this.inventoryValidator.validateProductInput(dto);
         if (dto.getId() == null) {
             dto.setId(idGenerator.generateId());
         }
@@ -38,7 +43,7 @@ public class ProductAccessImpl implements ProductDataAccess {
     }
 
     @Override
-    public void update(ProductDTO dto) {
+    public void update(ProductDto dto) {
         Optional<Product> optional = productRepository.findById(dto.getId());
         if (!optional.isPresent()) {
             throw new CustomValidationException("Product not found to update", new RuntimeException());
@@ -52,13 +57,13 @@ public class ProductAccessImpl implements ProductDataAccess {
     }
 
     @Override
-    public ProductDTO getProduct(String id) {
+    public ProductDto getProduct(String id) {
         return MAPPER
                 .productToProductDto(productRepository.findById(id).get());
     }
 
     @Override
-    public boolean isProductNameUsed(ProductDTO dto) {
+    public boolean isProductNameUsed(ProductDto dto) {
         Product product = productRepository.findByName(dto.getName());
         return product != null;
     }

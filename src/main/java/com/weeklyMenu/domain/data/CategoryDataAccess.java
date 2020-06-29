@@ -1,7 +1,7 @@
 package com.weeklyMenu.domain.data;
 
 
-import com.weeklyMenu.dto.CategoryDTO;
+import com.weeklyMenu.dto.CategoryDto;
 
 import java.util.List;
 
@@ -9,15 +9,15 @@ import java.util.List;
  * CategoryDataAccess is the abstract data access, from the domain layer
  */
 public interface CategoryDataAccess {
-    List<CategoryDTO> getAllCategories();
+    List<CategoryDto> getAllCategories();
 
-    CategoryDTO save(CategoryDTO product);
+    CategoryDto save(CategoryDto product);
 
-	void update(CategoryDTO dto);
+	void update(CategoryDto dto);
 
     void delete(String id);
     
-    CategoryDTO getCategory(String id);
+    CategoryDto getCategory(String id);
 
-    boolean isCategoryNameUsed(CategoryDTO dto);
+    boolean isCategoryNameUsed(CategoryDto dto);
 }

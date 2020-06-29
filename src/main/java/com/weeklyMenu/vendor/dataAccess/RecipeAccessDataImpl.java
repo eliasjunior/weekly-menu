@@ -14,6 +14,7 @@ import com.weeklyMenu.vendor.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -23,13 +24,18 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
     private final ProductRepository productRepository;
     private IdGenerator idGenerator;
     private final RecipeMapper MAPPER = RecipeMapper.INSTANCE;
+    private RecipeValidator recipeValidator;
 
     public RecipeAccessDataImpl(RecipeRepository recipeRepository,
-                                ProdDetailRepository prodDetailRepository, ProductRepository productRepository, IdGenerator idGenerator) {
+                                ProdDetailRepository prodDetailRepository,
+                                ProductRepository productRepository,
+                                IdGenerator idGenerator,
+                                RecipeValidator recipeValidator) {
         this.recipeRepository = recipeRepository;
         this.prodDetailRepository = prodDetailRepository;
         this.productRepository = productRepository;
         this.idGenerator = idGenerator;
+        this.recipeValidator = recipeValidator;
     }
 
     @Override
@@ -40,6 +46,7 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
     @Override
     public RecipeDto save(RecipeDto recipeDto) {
+        this.recipeValidator.validateInput(recipeDto);
         if (recipeDto.getId() == null) {
             recipeDto.setId(idGenerator.generateId());
             recipeDto.getProdsDetail().forEach(prodDetailDto -> {
@@ -53,6 +60,8 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
             ProdDetail prodDetail = MAPPER.prodDetailDtoToProdDetail(prodDetailDto);
             prodDetail.setRecipe(recipe);
 
+            // TODO validate/sanitize all inputs prodDetail.getProdId() can be null
+            // better message than -> The given id must not be null!; nested exception is java.lang.IllegalArgumentException: The given id must not be null!
             Optional<Product> product = productRepository.findById(prodDetail.getProdId());
             if(product.isPresent()) {
                 prodDetailRepository.save(prodDetail);

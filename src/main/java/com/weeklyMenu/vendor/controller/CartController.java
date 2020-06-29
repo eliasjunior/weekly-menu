@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(GlobalConstant.BASE_URL + "/cart")
+@RequestMapping(GlobalConstant.BASE_URL + "/carts")
 public class CartController {
     final CartAccessData cartAccessData;
     final Logger LOGGER = LoggerFactory.getLogger(CartController.class);

@@ -1,9 +1,9 @@
 package com.weeklyMenu.vendor.controller;
 
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
 import com.weeklyMenu.domain.data.ProductDataAccess;
-import com.weeklyMenu.dto.ProductDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
-//TODO should be into the vendor dir because the spring annotation
 @RestController
 @RequestMapping(GlobalConstant.BASE_URL + "/products")
 public class ProductController {
@@ -33,30 +33,33 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDTO> getProducts() {
+    public List<ProductDto> getProducts() {
         LOGGER.info("--> getProducts");
         return productDataAccess.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProduct(@PathVariable String id) {
+    public ProductDto getProduct(@PathVariable String id) {
         LOGGER.info("--> getProduct {}", id);
         return productDataAccess.getProduct(id);
     }
 
     @PostMapping
-    public ProductDTO create(@RequestBody ProductDTO productDto) {
+    public ResponseEntity<ProductDto> create(@RequestBody ProductDto productDto) {
         LOGGER.info("--> save");
         boolean isCreated = productDataAccess.isProductNameUsed(productDto);
         if (!isCreated) {
-            return productDataAccess.save(productDto);
+            ProductDto newDto = productDataAccess.save(productDto);
+            return ResponseEntity
+                    .created(URI.create(String.format(GlobalConstant.BASE_URL + "/products/%s", newDto.getId())))
+                    .body(newDto);
         } else {
             throw new CustomValidationException("Name already exits ", new RuntimeException());
         }
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody ProductDTO dto) {
+    public ResponseEntity<String> update(@RequestBody ProductDto dto) {
         LOGGER.info("--> update");
         productDataAccess.update(dto);
         return ResponseEntity.noContent().build();

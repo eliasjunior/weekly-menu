@@ -1,7 +1,7 @@
 package com.weeklyMenu.vendor.mapper;
 
-import com.weeklyMenu.dto.CategoryDTO;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.CategoryDto;
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.model.Product;
 import org.mapstruct.Mapper;
@@ -15,16 +15,16 @@ public interface InventoryMapper {
     InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
 
     @Mapping(source = "catId", target = "category.id")
-    Product productDtoToProduct(ProductDTO dto);
+    Product productDtoToProduct(ProductDto dto);
 
     @Mapping(source = "category.id", target = "catId")
-    ProductDTO productToProductDto(Product entity);
+    ProductDto productToProductDto(Product entity);
 
-    List<ProductDTO> listProductDtoToProduct(List<Product> products);
+    List<ProductDto> listProductDtoToProduct(List<Product> products);
 
-    CategoryDTO categoryToCategoryDto(Category entity);
+    CategoryDto categoryToCategoryDto(Category entity);
 
-    Category categoryDtoToCategory(CategoryDTO dto);
+    Category categoryDtoToCategory(CategoryDto dto);
 
-    List<CategoryDTO> categoryToCategoryDto(List<Category> categories);
+    List<CategoryDto> categoryToCategoryDto(List<Category> categories);
 }

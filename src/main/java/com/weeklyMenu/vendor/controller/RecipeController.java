@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -41,11 +42,14 @@ public class RecipeController {
     }
 
     @PostMapping
-    public RecipeDto create(@RequestBody RecipeDto productDto) {
+    public  ResponseEntity<RecipeDto> create(@RequestBody RecipeDto productDto) {
         LOGGER.info("--> save");
         boolean isCreated = recipeDataAccess.isRecipeNameUsed(productDto);
         if (!isCreated) {
-            return recipeDataAccess.save(productDto);
+            RecipeDto recipeDto = recipeDataAccess.save(productDto);
+            return ResponseEntity
+                    .created(URI.create(String.format(GlobalConstant.BASE_URL + "/recipes/%s", recipeDto.getId())))
+                    .body(recipeDto);
         } else {
             throw new CustomValidationException("Name already exits ", new RuntimeException());
         }

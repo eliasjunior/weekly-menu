@@ -5,15 +5,15 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategoryDTO {
-    public CategoryDTO() {
+public class CategoryDto {
+    public CategoryDto() {
     }
-    public CategoryDTO(String id) {
+    public CategoryDto(String id) {
         this.id = id;
     }
 
     private String id;
     private String name;
-    private List<ProductDTO> products;
+    private List<ProductDto> products;
     private List<String> prodIds;
 }

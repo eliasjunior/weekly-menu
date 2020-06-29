@@ -1,21 +1,21 @@
 package com.weeklyMenu.domain.data;
 
 import java.util.List;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDto;
 
 /**
  * ProductDataAccess is the abstract data access, from the domain layer 
  */
 public interface ProductDataAccess {
-    List<ProductDTO> getAllProducts();
+    List<ProductDto> getAllProducts();
 
-    ProductDTO save(ProductDTO product);
+    ProductDto save(ProductDto product);
 
-	void update(ProductDTO dto);
+	void update(ProductDto dto);
 
     void delete(String id);
     
-    ProductDTO getProduct(String id);
+    ProductDto getProduct(String id);
 
-    boolean isProductNameUsed(ProductDTO dto);
+    boolean isProductNameUsed(ProductDto dto);
 }

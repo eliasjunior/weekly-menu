@@ -94,6 +94,9 @@ public class CartAccessDataImpl implements CartAccessData {
     }
 
     private List<ProductItemDto> generateIdProdItem(List<ProductItemDto> dtoItems) {
+        if(dtoItems == null) {
+            throw new CustomValidationException("There is not product item to save the cart");
+        }
         return dtoItems
             .stream()
             .map(productItemDto -> {

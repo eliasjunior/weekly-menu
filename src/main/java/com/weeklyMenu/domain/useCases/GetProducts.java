@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.weeklyMenu.domain.data.ProductDataAccess;
 import com.weeklyMenu.domain.data.ProductInputBoundary;
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDto;
 
 //TODO on hold, I'll create use case for cases more complex
 public class GetProducts {
@@ -16,11 +16,11 @@ public class GetProducts {
         this.inputData = inputData;
     }
 
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return this.dataAccess.getAllProducts();
     }
 
-    public ProductDTO getProduct(String id) {
+    public ProductDto getProduct(String id) {
         // TODO maybe change to Objects.requireNonNull
         if(id == null) {
             //TODO: internationalization

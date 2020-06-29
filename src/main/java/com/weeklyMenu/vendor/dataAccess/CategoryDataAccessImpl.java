@@ -1,9 +1,9 @@
 package com.weeklyMenu.vendor.dataAccess;
 
+import com.weeklyMenu.dto.CategoryDto;
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.domain.data.CategoryDataAccess;
-import com.weeklyMenu.dto.CategoryDTO;
-import com.weeklyMenu.dto.ProductDTO;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.model.Category;
@@ -15,20 +15,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryAccessImpl implements CategoryDataAccess {
+public class CategoryDataAccessImpl implements CategoryDataAccess {
     private CategoryRepository categoryRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
     private IdGenerator idGenerator;
 
-    public CategoryAccessImpl(CategoryRepository categoryRepository, IdGenerator idGenerator) {
+    public CategoryDataAccessImpl(CategoryRepository categoryRepository, IdGenerator idGenerator) {
         this.categoryRepository = categoryRepository;
         this.idGenerator = idGenerator;
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        List<CategoryDTO> catsDto = MAPPER.categoryToCategoryDto(categoryRepository.findAll());
-        List<CategoryDTO> withCatProds = catsDto
+    public List<CategoryDto> getAllCategories() {
+        List<CategoryDto> catsDto = MAPPER.categoryToCategoryDto(categoryRepository.findAll());
+        List<CategoryDto> withCatProds = catsDto
                 .stream()
                 .map(cat -> populateCatProds(cat))
                 .collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class CategoryAccessImpl implements CategoryDataAccess {
     }
 
     @Override
-    public CategoryDTO save(CategoryDTO categoryDTO) {
+    public CategoryDto save(CategoryDto categoryDTO) {
         if (categoryDTO.getId() == null) {
             categoryDTO.setId(idGenerator.generateId());
         }
@@ -45,7 +45,7 @@ public class CategoryAccessImpl implements CategoryDataAccess {
         if (categoryDTO.getProdIds() != null && categoryDTO.getProdIds().size() > 0) {
             categoryDTO.setProducts(categoryDTO.getProdIds()
                     .stream()
-                    .map(prodId -> new ProductDTO(prodId))
+                    .map(prodId -> new ProductDto(prodId))
                     .collect(Collectors.toList()));
         }
 
@@ -53,7 +53,7 @@ public class CategoryAccessImpl implements CategoryDataAccess {
     }
 
     @Override
-    public void update(CategoryDTO dto) {
+    public void update(CategoryDto dto) {
         Optional<Category> optional = categoryRepository.findById(dto.getId());
         if (!optional.isPresent()) {
             throw new CustomValidationException("Category not found to update", new RuntimeException());
@@ -67,18 +67,18 @@ public class CategoryAccessImpl implements CategoryDataAccess {
     }
 
     @Override
-    public CategoryDTO getCategory(String id) {
+    public CategoryDto getCategory(String id) {
         return MAPPER
                 .categoryToCategoryDto(categoryRepository.findById(id).get());
     }
 
     @Override
-    public boolean isCategoryNameUsed(CategoryDTO dto) {
+    public boolean isCategoryNameUsed(CategoryDto dto) {
         Category category = categoryRepository.findByName(dto.getName());
         return category != null;
     }
 
-    private CategoryDTO populateCatProds(CategoryDTO cat) {
+    private CategoryDto populateCatProds(CategoryDto cat) {
         try {
             List<String> catProds = cat.getProducts()
                     .stream()

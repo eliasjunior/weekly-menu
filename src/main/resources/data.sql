@@ -1,0 +1,1 @@
+insert into CATEGORY values ('001','Bakery');

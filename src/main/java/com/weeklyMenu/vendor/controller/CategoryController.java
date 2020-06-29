@@ -1,9 +1,9 @@
 package com.weeklyMenu.vendor.controller;
 
+import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
 import com.weeklyMenu.domain.data.CategoryDataAccess;
-import com.weeklyMenu.dto.CategoryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +32,17 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryDTO> getCategories() {
+    public List<CategoryDto> getCategories() {
         LOGGER.info("--> getCategories");
         return categoryDataAccess.getAllCategories();
     }
     @GetMapping("/{id}")
-    public CategoryDTO getCategory(@PathVariable String id) {
+    public CategoryDto getCategory(@PathVariable String id) {
         LOGGER.info("--> getCategory {}", id);
         return categoryDataAccess.getCategory(id);
     }
     @PostMapping
-    public CategoryDTO create(@RequestBody CategoryDTO dto) {
+    public CategoryDto create(@RequestBody CategoryDto dto) {
         LOGGER.info("--> save");
         boolean isCreated = categoryDataAccess.isCategoryNameUsed(dto);
         if(!isCreated) {
@@ -52,7 +52,7 @@ public class CategoryController {
         }
     }
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody CategoryDTO dto) {
+    public ResponseEntity<String> update(@RequestBody CategoryDto dto) {
         LOGGER.info("--> update");
         categoryDataAccess.update(dto);
         return ResponseEntity.noContent().build();

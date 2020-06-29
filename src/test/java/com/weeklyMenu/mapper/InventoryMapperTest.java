@@ -1,6 +1,6 @@
 package com.weeklyMenu.mapper;
 
-import com.weeklyMenu.dto.ProductDTO;
+import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
@@ -14,7 +14,7 @@ public class InventoryMapperTest {
 
     @Test
     public void testDtoToEntityBeConverted() {
-        ProductDTO dto = new ProductDTO();
+        ProductDto dto = new ProductDto();
        // dto.setId(1l);
         dto.setName("Norris");
 
