@@ -1,7 +1,9 @@
-package com.weeklyMenu.inventory;
+package com.weeklyMenu.vendor.dataAccess;
 
 import com.weeklyMenu.BaseIntegration;
+import com.weeklyMenu.domain.data.CategoryDataAccess;
 import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.domain.data.RecipeDataAccess;
 import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.vendor.dataAccess.CategoryDataAccessImpl;
@@ -9,7 +11,7 @@ import com.weeklyMenu.vendor.dataAccess.ProductDataAccessImpl;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.model.Product;
-import com.weeklyMenu.vendor.repository.CategoryRepository;
+import com.weeklyMenu.vendor.repository.RecipeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,15 @@ import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class InventoryTest extends BaseIntegration {
+public class InventoryTest {
     @Autowired
-    private CategoryDataAccessImpl catDataApi;
-
+    CategoryDataAccess categoryDataAccess;
     @Autowired
-    private ProductDataAccessImpl productDataApi;
+    RecipeDataAccess recipeAccessData;
+    @Autowired
+    private ProductDataAccess productDataAccess;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Test
     public void testMapperDtoToEntity() {
@@ -57,11 +62,4 @@ public class InventoryTest extends BaseIntegration {
         System.out.println("&&&&& --> #################");
         System.out.println(inventoryMapper.productToProductDto(product));
     }
-
-    @Test
-    public void simpleCrudInventory() {
-        createProduct(catDataApi, productDataApi);
-    }
-
-
 }

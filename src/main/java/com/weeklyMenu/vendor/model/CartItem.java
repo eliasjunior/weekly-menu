@@ -15,9 +15,8 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "PRODUCT_ITEM")
-public class ProductItem extends BaseEntity {
-
+@Table(name = "CART_ITEM")
+public class CartItem extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "PROD_ID", referencedColumnName = "ID")
     private Product product;
@@ -29,6 +28,6 @@ public class ProductItem extends BaseEntity {
     @Column(name ="SELECTED")
     private boolean selected;
 
-    @OneToMany(mappedBy = "productItem", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cartItem", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Recipe> recipes;
 }

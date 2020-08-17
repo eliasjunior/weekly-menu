@@ -14,10 +14,10 @@ import java.util.List;
 @Table(name = "CART")
 public class Cart extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cart")
-    private List<ProductItem> productItems;
+    private List<CartItem> cartItems;
 
     @Override
     public String toString() {
-        return "ShoppingList(" + super.toString() + ", items="+ productItems.size() +")";
+        return "ShoppingList(" + super.toString() + ", items="+ cartItems.size() +")";
     }
 }

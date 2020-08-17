@@ -1,12 +1,12 @@
 package com.weeklyMenu.cart;
 
 import com.weeklyMenu.dto.CartDto;
-import com.weeklyMenu.dto.ProductItemDto;
+import com.weeklyMenu.dto.CartItemDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.vendor.mapper.CartMapper;
+import com.weeklyMenu.vendor.model.CartItem;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
-import com.weeklyMenu.vendor.model.ProductItem;
 import com.weeklyMenu.vendor.model.Cart;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class CartMapperTest {
-
+    CartMapper CART_MAPPER = CartMapper.INSTANCE;
     @Test
     public void testMapperDtoToEntity() {
         CartMapper MAPPER = CartMapper.INSTANCE;
@@ -29,24 +29,26 @@ public class CartMapperTest {
         recDto.setId("REC_ID_01");
         recipes.add(recDto);
 
-        List<ProductItemDto> itemsDto = new ArrayList<>();
-        ProductItemDto itemDto = new ProductItemDto();
-        itemDto.setProdId("PROD_01");
-        itemDto.setRecipes(recipes);
-        itemsDto.add(itemDto);
+        //TODO cartItems
+        List<CartItemDto> cartItemsDTO = new ArrayList<>();
+        CartItemDto cartItemDTO = new CartItemDto();
+        cartItemDTO.setProdId("PROD_01");
+        cartItemDTO.setRecipes(recipes);
+        cartItemsDTO.add(cartItemDTO);
 
-        cartDto.setProductItems(itemsDto);
+        cartDto.setProductItems(cartItemsDTO);
 
-        System.out.println("Cart #################");
+        System.out.println("Cart #################, Items qtd="+cartDto.getProductItems().size());
         Cart cart = MAPPER.dtoToCart(cartDto);
+
+        cart.setCartItems(MAPPER.cartItemsDtosToCartItems(cartDto.getProductItems()));
+
         System.out.println(cart);
-        cart.getProductItems().forEach(item -> System.out.println(item));
+        cart.getCartItems().forEach(item -> System.out.println(item));
     }
 
     @Test
     public void testMapperEntityToDto() {
-        CartMapper MAPPER = CartMapper.INSTANCE;
-
         Cart cart = new Cart();
         cart.setName("Today");
         cart.setId(UUID.randomUUID().toString());
@@ -56,17 +58,17 @@ public class CartMapperTest {
         rec.setId("REC_01");
         recipes.add(rec);
 
-        List<ProductItem> items = new ArrayList<>();
-        ProductItem item = new ProductItem();
+        List<CartItem> items = new ArrayList<>();
+        CartItem item = new CartItem();
         Product product = new Product();
         product.setId("PROD_01");
         item.setProduct(product);
         item.setRecipes(recipes);
         items.add(item);
 
-        cart.setProductItems(items);
+        cart.setCartItems(items);
 
         System.out.println("cart #################");
-        System.out.println(MAPPER.cartToDto(cart));
+        System.out.println(CART_MAPPER.cartToDto(cart));
     }
 }

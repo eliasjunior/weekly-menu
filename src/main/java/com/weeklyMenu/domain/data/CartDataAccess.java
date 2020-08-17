@@ -4,7 +4,7 @@ import com.weeklyMenu.dto.CartDto;
 
 import java.util.List;
 
-public interface CartAccessData {
+public interface CartDataAccess {
     List<CartDto> getCartList();
 
     CartDto save(CartDto shoppingList);

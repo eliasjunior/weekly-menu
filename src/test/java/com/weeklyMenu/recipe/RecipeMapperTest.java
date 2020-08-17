@@ -4,6 +4,7 @@ import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
 import com.weeklyMenu.vendor.model.ProdDetail;
+import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import org.junit.Test;
 
@@ -45,7 +46,11 @@ public class RecipeMapperTest {
         ProdDetail prodDetail = new ProdDetail();
         prodDetail.setId("1");
         prodDetail.setQuantity(2);
-        prodDetail.setProdId("prod1");
+       // prodDetail.setProdId("prod1");
+
+        Product product = new Product();
+        product.setId("prod1");
+        prodDetail.setProduct(product);
 
         List<ProdDetail> prodsDetail = new ArrayList<>();
         prodsDetail.add(prodDetail);

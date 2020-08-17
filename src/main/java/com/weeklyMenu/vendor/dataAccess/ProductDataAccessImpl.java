@@ -17,14 +17,14 @@ public class ProductDataAccessImpl implements ProductDataAccess {
     private final ProductRepository productRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
     private IdGenerator idGenerator;
-    private InventoryValidator inventoryValidator;
+    private DataAccessValidator validator;
 
     ProductDataAccessImpl(ProductRepository productRepository,
                           IdGenerator idGenerator,
-                          InventoryValidator inventoryValidator) {
+                          DataAccessValidator validator) {
         this.productRepository = productRepository;
         this.idGenerator = idGenerator;
-        this.inventoryValidator = inventoryValidator;
+        this.validator = validator;
     }
 
     public List<ProductDto> getAllProducts() {
@@ -34,7 +34,7 @@ public class ProductDataAccessImpl implements ProductDataAccess {
 
     @Override
     public ProductDto save(ProductDto dto) {
-        this.inventoryValidator.validateProductInput(dto);
+        this.validator.validateProductDto(dto);
         if (dto.getId() == null) {
             dto.setId(idGenerator.generateId());
         }

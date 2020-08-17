@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "PROD_DETAIL")
@@ -17,13 +18,14 @@ public class ProdDetail {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "PROD_ID")
-    private String prodId;
-
     @Column(name = "QUANTITY")
     private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "REC_ID")
     private Recipe recipe;
+
+    @ManyToOne
+    @JoinColumn(name = "PROD_ID")
+    private Product product;
 }

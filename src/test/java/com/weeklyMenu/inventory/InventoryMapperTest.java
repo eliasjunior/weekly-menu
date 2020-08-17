@@ -1,4 +1,4 @@
-package com.weeklyMenu.mapper;
+package com.weeklyMenu.inventory;
 
 import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;

@@ -2,12 +2,16 @@ package com.weeklyMenu.vendor.model;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * Product
@@ -29,5 +33,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "CAT_ID")
     private Category category;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ProdDetail> prodsDetail;
 
 }

@@ -20,7 +20,7 @@ public class Recipe extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "PROD_ITEM_ID")
-    private ProductItem productItem;
+    private CartItem cartItem;
 
     // lombok stack overflow that would call product toString(products)
     public String toString() {

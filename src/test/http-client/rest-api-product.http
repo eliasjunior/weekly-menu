@@ -1,0 +1,28 @@
+###
+GET http://localhost:8080/v1/product
+Accept: application/json
+
+<> 2020-06-06T064302.200.json
+
+
+###
+POST http://localhost:8080/v1/product
+Content-Type: application/json
+
+{   "name": "Water",   "quantityType": "2",   "catId": "094b7850-bdae-4f32-b5d0-bb2d20c7f7e0"}
+
+<> 2020-06-06T064258.200.json
+<> 2020-06-06T064151.200.json
+
+
+###
+
+PUT  http://localhost:8080/v1/product
+Content-Type: application/json
+
+{   "name": "Carrot",   "quantityType": "3",   "catId": 2, "id": "91a7906a-3ad8-4860-a4fe-f957538ec50e" }
+
+<> 2020-06-04T115607-2.500.json
+
+###
+

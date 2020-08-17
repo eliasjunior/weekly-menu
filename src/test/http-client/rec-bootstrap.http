@@ -1,0 +1,25 @@
+###
+POST http://localhost:8080/v1/recipes
+Content-Type: application/json
+
+{
+  "name": "Feijoada",
+  "prodsDetail": [
+    {
+      "prodId": "14bdd14f-70ca-4ea6-a2b0-0915d9e3ca80",
+      "quantity": 2
+    }
+  ]
+}
+
+
+
+###
+GET http://localhost:8080/v1/recipes
+Accept: application/json
+
+<> 2020-06-19T093925.200.json
+<> 2020-06-17T112800.200.json
+<> 2020-06-16T114739.200.json
+
+###

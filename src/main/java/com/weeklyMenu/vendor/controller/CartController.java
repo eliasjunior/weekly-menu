@@ -1,7 +1,7 @@
 package com.weeklyMenu.vendor.controller;
 
 
-import com.weeklyMenu.domain.data.CartAccessData;
+import com.weeklyMenu.domain.data.CartDataAccess;
 import com.weeklyMenu.dto.CartDto;
 import com.weeklyMenu.helpers.GlobalConstant;
 import org.slf4j.Logger;
@@ -22,36 +22,36 @@ import java.util.List;
 @RestController
 @RequestMapping(GlobalConstant.BASE_URL + "/carts")
 public class CartController {
-    final CartAccessData cartAccessData;
+    final CartDataAccess cartDataAccess;
     final Logger LOGGER = LoggerFactory.getLogger(CartController.class);
 
     @Autowired
-    public CartController(CartAccessData cartAccessData) {
-        this.cartAccessData = cartAccessData;
+    public CartController(CartDataAccess cartDataAccess) {
+        this.cartDataAccess = cartDataAccess;
     }
 
     @GetMapping
     public List<CartDto> getCartList() {
         LOGGER.info("--> getCartList");
-        return cartAccessData.getCartList();
+        return cartDataAccess.getCartList();
     }
 
     @PostMapping
     public CartDto postShoppingList(@RequestBody CartDto dto) {
         LOGGER.info("--> save", dto);
-        return cartAccessData.save(dto);
+        return cartDataAccess.save(dto);
     }
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody CartDto dto) {
         LOGGER.info("--> update", dto);
-        cartAccessData.update(dto);
+        cartDataAccess.update(dto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> delete(@PathVariable String id) {
-        cartAccessData.delete(id);
+        cartDataAccess.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,0 +1,56 @@
+###
+POST http://localhost:8080/v1/categories
+Content-Type: application/json
+
+{
+  "name": "Drinks"
+}
+
+> {% client.global.set("catId",  response.body.id);  %}
+
+###
+POST http://localhost:8080/v1/products
+Content-Type: application/json
+
+{   "name": "Water",   "quantityType": "2",   "catId": "{{catId}}" }
+
+> {% client.global.set("prodId", response.body.id); %}
+
+
+###
+POST http://localhost:8080/v1/recipes
+Content-Type: application/json
+
+{
+  "name": "Feijoada",
+  "prodsDetail": [
+    {
+      "prodId": "{{prodId}}",
+      "quantity": 2
+    }
+  ]
+}
+
+> {% client.global.set("recId", response.body.id); %}
+
+
+###
+POST http://localhost:8080/v1/cart
+Content-Type: application/json
+
+{
+  "name": "Today",
+  "cartItems": [
+    {
+      "id": "1",
+      "prodId": "{{prodId}}",
+      "recipes": [{"id":"{{recId}}"}],
+      "selected": true
+    }
+  ]
+}
+
+
+
+
+
