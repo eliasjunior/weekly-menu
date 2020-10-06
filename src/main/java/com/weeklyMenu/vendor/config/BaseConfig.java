@@ -24,7 +24,7 @@ public class BaseConfig {
                 final String [] HOSTS_ALLOWED = {"http://localhost:3001", "https://weekly-menu-ui.herokuapp.com"};
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins(HOST_ALLOWED);
+                        .allowedOrigins(HOSTS_ALLOWED);
             }
         };
     }
