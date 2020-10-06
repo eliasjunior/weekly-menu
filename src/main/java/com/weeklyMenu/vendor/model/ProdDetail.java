@@ -1,6 +1,7 @@
 package com.weeklyMenu.vendor.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,10 +22,12 @@ public class ProdDetail {
     @Column(name = "QUANTITY")
     private Integer quantity;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "REC_ID")
     private Recipe recipe;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "PROD_ID")
     private Product product;

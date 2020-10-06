@@ -6,7 +6,6 @@ import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.ProdDetail;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.ProdDetailRepository;
@@ -61,35 +60,36 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
     @Override
     public void update(RecipeDto dto) {
-        Optional<Recipe> optional = recipeRepository.findById(dto.getId());
-        if (!optional.isPresent()) {
-            throw new CustomValidationException("Recipe not found to update", new RuntimeException());
-        }
         this.saveAndValidate(dto, true);
     }
 
     private Recipe saveAndValidate(RecipeDto recipeDto, boolean isUpdate) {
-        this.recipeValidator.validateRecipeDto(recipeDto, this.validateProductsFromItems(recipeDto.getProdsDetail()));
+        Recipe oldRecipe = new Recipe();
+        if (isUpdate) {
+            Optional<Recipe> optional = recipeRepository.findById(recipeDto.getId());
+            if (!optional.isPresent()) {
+                throw new CustomValidationException("Recipe not found to update");
+            }
+            oldRecipe = optional.get();
+        }
+
+        this.recipeValidator.validateRecipeDto(recipeDto, this.validateProductsFromItems(recipeDto.getProdsDetail(), isUpdate));
+
         if (isNull(recipeDto.getId()) && !isUpdate) {
             recipeDto.setId(idGenerator.generateId());
         }
-        recipeDto.getProdsDetail().forEach(prodDetailDto -> {
-            if(isNull(prodDetailDto.getId()) && !isUpdate) {
-                prodDetailDto.setId(idGenerator.generateId());
-            } else if(isUpdate && isNull(prodDetailDto.getId())) {
-                throw new CustomValidationException("Update recipe items, recipe item id cannot be null");
-            }
-        });
 
-        Recipe recipe = recipeRepository.save(MAPPER.recipeDtoToRecipe(recipeDto));
+        recipeDto.generateItemsIds(idGenerator);
 
-        recipeDto.getProdsDetail().forEach(prodDetailDto -> {
-            ProdDetail prodDetail = MAPPER.prodDetailDtoToProdDetail(prodDetailDto);
-            prodDetail.setRecipe(recipe);
-            //TODO double check for update Prod details, Ian is complaining cant pay attention
-            prodDetailRepository.save(prodDetail);
-        });
-        return recipe;
+        if (isUpdate) {
+            //remove all children to be add again afterwards
+            oldRecipe.removeAll();
+        }
+
+        Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
+        newRecipe.linkAllToRecipe();
+
+        return recipeRepository.save(newRecipe);
     }
 
     @Override
@@ -109,21 +109,42 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
     }
 
     // Cant add this to the validator because it rely on the repository
-    private List<Product> validateProductsFromItems(List<ProdDetailDto> recipeItems) {
+    private List<Product> validateProductsFromItems(List<ProdDetailDto> recipeItems, boolean isUpdate) {
+        if (Objects.isNull(recipeItems) || recipeItems.size() == 0) {
+            throw new CustomValidationException("Recipe must has at least one product");
+        }
+
+//        for (ProdDetailDto detailDto : recipeItems) {
+//            checkQuantity(detailDto.getQuantity());
+//            if (isUpdate && Objects.nonNull(detailDto.getId())) {
+//                Optional<ProdDetail> op = prodDetailRepository.findById(detailDto.getId());
+//                if (!op.isPresent()) {
+        //TODO this was NOT correct because I can check new recipe items to the list and just add new Item to the list, CREATE a test to it, does it UNIT fits here ???
+//                    throw new CustomValidationException("Prod detail id not found.");
+//                }
+//            }
+//        }
+
         List<Product> products = recipeItems
                 .stream()
                 .map(prodDetailDto -> checkProduct(prodDetailDto.getProdId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
-        return products;
 
+        return products;
     }
 
     private Optional<Product> checkProduct(String productId) {
-        if(Objects.isNull(productId)) {
-            throw  new CustomValidationException("Product id from ProdDetail cannot be null");
+        if (Objects.isNull(productId)) {
+            throw new CustomValidationException("Product id from ProdDetail cannot be null");
         }
         return productRepository.findById(productId);
+    }
+
+    private void checkQuantity(Integer quantity) {
+        if (Objects.isNull(quantity)) {
+            throw new CustomValidationException("Product quantity from ProdDetail cannot be null");
+        }
     }
 }

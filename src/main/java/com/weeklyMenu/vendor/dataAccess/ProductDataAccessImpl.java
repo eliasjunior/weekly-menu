@@ -48,6 +48,7 @@ public class ProductDataAccessImpl implements ProductDataAccess {
         if (!optional.isPresent()) {
             throw new CustomValidationException("Product not found to update", new RuntimeException());
         }
+
         productRepository.save(MAPPER.productDtoToProduct(dto));
     }
 

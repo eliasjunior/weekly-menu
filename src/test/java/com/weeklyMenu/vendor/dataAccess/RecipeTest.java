@@ -9,6 +9,7 @@ import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.dto.RecipeDto;
+import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.RecipeRepository;
 import org.junit.Before;
@@ -46,6 +47,17 @@ public class RecipeTest {
         baseIntegration = new BaseIntegration(categoryDataAccess, productDataAccess, recipeRepository);
     }
 
+    @Test(expected = CustomValidationException.class)
+    public void try_to_create_recipe_with_no_prods() {
+        RecipeDto recipeToTest = new RecipeDto();
+        recipeToTest.setName("No Prod Recipe");
+
+        RecipeDto recipeCreated = recipeAccessData.save(recipeToTest);
+
+        assertNotNull(recipeCreated.getId());
+        assertEquals(2, recipeCreated.getProdsDetail().size());
+    }
+
     @Test
     public void create_recipe_with_prods() {
         CategoryDto categoryDto = this.baseIntegration.categoryFactory();
@@ -58,10 +70,7 @@ public class RecipeTest {
 
         RecipeDto recipeToTest = RecipeFactory.createRecipeNoId(recipeItems);
 
-        RecipeDto recipeCreated = recipeAccessData.save(recipeToTest);
-
-        assertNotNull(recipeCreated.getId());
-        assertEquals(2, recipeCreated.getProdsDetail().size());
+        recipeAccessData.save(recipeToTest);
     }
 
     @Test

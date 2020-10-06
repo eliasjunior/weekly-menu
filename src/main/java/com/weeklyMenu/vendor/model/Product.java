@@ -1,6 +1,7 @@
 package com.weeklyMenu.vendor.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,6 +35,7 @@ public class Product {
     @JoinColumn(name = "CAT_ID")
     private Category category;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProdDetail> prodsDetail;
 

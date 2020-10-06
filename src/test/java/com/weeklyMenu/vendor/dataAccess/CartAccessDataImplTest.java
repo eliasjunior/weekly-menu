@@ -64,7 +64,6 @@ public class CartAccessDataImplTest {
 
     @Test(expected = CustomValidationException.class)
     public void test_whenCartDtoPostIsNotValid_throwCustomException() {
-
         CartDto cartDto = new CartDto();
         CategoryDto categoryDto = baseIntegration.categoryFactory();
         ProductDto productDto = baseIntegration.productFactory(categoryDto.getId());
@@ -78,7 +77,6 @@ public class CartAccessDataImplTest {
         };
         CartAccessDataImpl impl = new CartAccessDataImpl(cartRepository, recipeRepository, productRepository, idGenerator, validator);
         impl.save(cartDto);
-
     }
 
     @Test
