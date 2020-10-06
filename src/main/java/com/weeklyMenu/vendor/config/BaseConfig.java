@@ -21,7 +21,7 @@ public class BaseConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                final String HOST_ALLOWED = "http://localhost:3001";
+                final String [] HOSTS_ALLOWED = {"http://localhost:3001", "https://weekly-menu-ui.herokuapp.com"};
                 registry.addMapping("/**")
                         .allowedMethods("*")
                         .allowedOrigins(HOST_ALLOWED);
