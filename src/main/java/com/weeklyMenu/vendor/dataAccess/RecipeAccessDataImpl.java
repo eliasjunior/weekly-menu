@@ -6,6 +6,7 @@ import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
+import com.weeklyMenu.vendor.model.ProdDetail;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.ProdDetailRepository;
@@ -46,20 +47,21 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
     @Override
     public List<RecipeDto> getAllRecipes() {
-        LOGGER.info("getAllRecipes");
+        LOGGER.debug("getAllRecipes");
         List<Recipe> recipes = recipeRepository.findAll();
         return MAPPER.recipesToRecipesDto(recipes);
     }
 
     @Override
     public RecipeDto save(RecipeDto recipeDto) {
-        LOGGER.info("save", recipeDto);
+        LOGGER.debug("save", recipeDto.toString());
         Recipe recipe = this.saveAndValidate(recipeDto, false);
         return MAPPER.recipeToRecipeDto(recipe);
     }
 
     @Override
     public void update(RecipeDto dto) {
+        LOGGER.debug("update", dto.toString());
         this.saveAndValidate(dto, true);
     }
 
@@ -73,7 +75,7 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
             oldRecipe = optional.get();
         }
 
-        this.recipeValidator.validateRecipeDto(recipeDto, this.validateProductsFromItems(recipeDto.getProdsDetail(), isUpdate));
+        this.recipeValidator.validateRecipeDto(recipeDto, this.validateProductsFromItems(recipeDto.getProdsDetail()));
 
         if (isNull(recipeDto.getId()) && !isUpdate) {
             recipeDto.setId(idGenerator.generateId());
@@ -83,7 +85,7 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
         if (isUpdate) {
             //remove all children to be add again afterwards
-            oldRecipe.removeAll();
+            oldRecipe.removeAllItems();
         }
 
         Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
@@ -109,21 +111,20 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
     }
 
     // Cant add this to the validator because it rely on the repository
-    private List<Product> validateProductsFromItems(List<ProdDetailDto> recipeItems, boolean isUpdate) {
+    private List<Product> validateProductsFromItems(List<ProdDetailDto> recipeItems) {
         if (Objects.isNull(recipeItems) || recipeItems.size() == 0) {
             throw new CustomValidationException("Recipe must has at least one product");
         }
 
-//        for (ProdDetailDto detailDto : recipeItems) {
-//            checkQuantity(detailDto.getQuantity());
-//            if (isUpdate && Objects.nonNull(detailDto.getId())) {
-//                Optional<ProdDetail> op = prodDetailRepository.findById(detailDto.getId());
-//                if (!op.isPresent()) {
-        //TODO this was NOT correct because I can check new recipe items to the list and just add new Item to the list, CREATE a test to it, does it UNIT fits here ???
-//                    throw new CustomValidationException("Prod detail id not found.");
-//                }
-//            }
-//        }
+        for (ProdDetailDto detailDto : recipeItems) {
+            checkQuantity(detailDto.getQuantity());
+            if (Objects.nonNull(detailDto.getId())) {
+                Optional<ProdDetail> op = prodDetailRepository.findById(detailDto.getId());
+                if (!op.isPresent()) {
+                    throw new CustomValidationException("ProdDetail id verification, id=" +detailDto.getId() + " was not found");
+                }
+            }
+        }
 
         List<Product> products = recipeItems
                 .stream()

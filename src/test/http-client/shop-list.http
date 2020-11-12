@@ -1,15 +1,26 @@
-POST http://localhost:8080/v1/carts
+POST http://localhost:8082/v1/carts
 Content-Type: application/json
 
 {
   "name": "Today",
   "cartItems": [
-        {
-          "id": "1",
-          "prodId": "001_p",
-          "recipes": [{"id":"85df85a9-dbbb-4ad3-a80b-721805386926"}],
-          "selected": false
-        }
+    {
+      "name" : "Flour",
+      "id": "1",
+      "prodId": "70b7b4bf-d18e-48d9-bb74-fd317752eaac",
+      "recipes": [
+          "985f9f6f-c1de-4ef9-b320-8c7253cfdda3"
+      ],
+      "selected": false
+    },
+    {
+      "name": "Sugar",
+      "prodId": "b2427e3f-1bfb-40df-be32-92a7328710d5",
+      "recipes": [
+        "72aa50bb-fa27-4d7a-8b04-88608c121f3a"
+      ],
+      "selected": false
+    }
   ]
 }
 > {% client.global.set("cartId",  response.body.id);  %}
@@ -18,9 +29,10 @@ Content-Type: application/json
 <> 2020-07-08T060014.200.json
 <> 2020-07-08T055831.500.json
 <> 2020-07-08T055335.500.json
+
 ###
 
-PUT http://localhost:8080/v1/carts
+PUT http://localhost:8082/v1/carts
 Content-Type: application/json
 
 {
@@ -30,22 +42,11 @@ Content-Type: application/json
     {
       "id": "bc1fb4c8-0c32-44e0-b164-4872d7ce0ff3",
       "prodId": "001_p",
-      "recipes": [{"id":"85df85a9-dbbb-4ad3-a80b-721805386926"}],
+      "recipes": ["985f9f6f-c1de-4ef9-b320-8c7253cfdda3"],
       "selected": false
     }
   ]
 }
-
-<> 2020-07-08T054330.500.json
-
-
-###
-GET http://localhost:8080/v1/recipes
-Accept: application/json
-
-<> 2020-06-18T120609.200.json
-<> 2020-06-18T120543.200.json
-<> 2020-06-17T115119.404.json
 
 
 

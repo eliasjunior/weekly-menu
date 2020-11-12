@@ -11,8 +11,13 @@ import com.weeklyMenu.vendor.model.Cart;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
 
 public class CartMapperTest {
     CartMapper CART_MAPPER = CartMapper.INSTANCE;
@@ -24,27 +29,33 @@ public class CartMapperTest {
         cartDto.setName("Today");
         cartDto.setId(UUID.randomUUID().toString());
 
-        List<RecipeDto> recipes = new ArrayList<>();
-        RecipeDto recDto = new RecipeDto();
-        recDto.setId("REC_ID_01");
-        recipes.add(recDto);
+        Set<String> recipes = new HashSet<>();
+        String rec1 = "REC_ID_01";
+        recipes.add(rec1);
 
-        //TODO cartItems
         List<CartItemDto> cartItemsDTO = new ArrayList<>();
         CartItemDto cartItemDTO = new CartItemDto();
         cartItemDTO.setProdId("PROD_01");
         cartItemDTO.setRecipes(recipes);
         cartItemsDTO.add(cartItemDTO);
 
-        cartDto.setProductItems(cartItemsDTO);
+        cartDto.setCartItems(cartItemsDTO);
 
-        System.out.println("Cart #################, Items qtd="+cartDto.getProductItems().size());
+        System.out.println("Cart #################, Items qtd="+cartDto.getCartItems().size());
         Cart cart = MAPPER.dtoToCart(cartDto);
 
-        cart.setCartItems(MAPPER.cartItemsDtosToCartItems(cartDto.getProductItems()));
+       // cart.setCartItems(MAPPER.cartItemsDtosToCartItems(cartDto.getCartItems()));
 
         System.out.println(cart);
         cart.getCartItems().forEach(item -> System.out.println(item));
+
+        List<CartItemDto> cartItemDtos = cartDto.getCartItems();
+        List<CartItem> cartItems = cart.getCartItems();
+
+        assertEquals(cartDto.getId(), cart.getId());
+        assertEquals(cartDto.getName(), cart.getName());
+        assertEquals(cartItemDtos.get(0).getProdId(), "PROD_01");
+        assertEquals(cartItemDtos.get(0).getId(), cartItems.get(0).getId());
     }
 
     @Test
@@ -53,22 +64,27 @@ public class CartMapperTest {
         cart.setName("Today");
         cart.setId(UUID.randomUUID().toString());
 
-        List<Recipe> recipes = new ArrayList<>();
-        Recipe rec = new Recipe();
-        rec.setId("REC_01");
-        recipes.add(rec);
-
-        List<CartItem> items = new ArrayList<>();
-        CartItem item = new CartItem();
         Product product = new Product();
+        product.setName("Orange");
         product.setId("PROD_01");
+
+        Set<Recipe> recipes = new HashSet<>();
+        Recipe recipe = new Recipe();
+        recipe.setId("rec1");
+
+        CartItem item = new CartItem();
         item.setProduct(product);
-        item.setRecipes(recipes);
-        items.add(item);
+        item.setSelectedRecipes(new HashSet<>(Arrays.asList( recipe)));
+        item.setName(product.getName());
 
-        cart.setCartItems(items);
+        cart.setCartItems(Arrays.asList(item));
+        CartDto cartDto = CART_MAPPER.cartToDto(cart);
 
-        System.out.println("cart #################");
-        System.out.println(CART_MAPPER.cartToDto(cart));
+        CartItemDto cartItemDto = cartDto.getCartItems().get(0);
+        assertEquals(cart.getId(), cartDto.getId());
+        assertEquals(cart.getName(), cartDto.getName());
+        assertEquals(item.getProduct().getId(), cartItemDto.getProdId());
+        assertEquals(item.getId(), cartItemDto.getId());
+        assertEquals(item.getName(), cartItemDto.getName());
     }
 }

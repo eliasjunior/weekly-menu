@@ -62,13 +62,13 @@ public class DataAccessValidator {
 
     protected void validateCartDto(CartDto dto) {
         try {
-            Objects.requireNonNull(dto.getProductItems(), "List<ProductItems> from CartDto cannot be null");
-            dto.getProductItems().forEach(item -> {
+            Objects.requireNonNull(dto.getCartItems(), "List<ProductItems> from CartDto cannot be null");
+            dto.getCartItems().forEach(item -> {
                 Objects.requireNonNull(item.getProdId(),
                         "Product (item) ID from cart is missing");
                 if (Objects.nonNull(item.getRecipes())) {
-                    item.getRecipes().forEach(recipeDto -> {
-                        Objects.requireNonNull(recipeDto.getId(),
+                    item.getRecipes().forEach(recId -> {
+                        Objects.requireNonNull(recId,
                                 "Recipe (recipes[{id}]) ID from cart is missing");
                     });
                 }

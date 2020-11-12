@@ -1,6 +1,9 @@
 package com.weeklyMenu.vendor.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -20,6 +23,9 @@ import java.util.List;
 @Table(name = "PRODUCT")
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @Column(name = "ID")
@@ -38,5 +44,4 @@ public class Product {
     @ToString.Exclude
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProdDetail> prodsDetail;
-
 }

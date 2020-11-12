@@ -13,6 +13,7 @@ import com.weeklyMenu.vendor.repository.RecipeRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class BaseIntegration {
@@ -47,7 +48,7 @@ public class BaseIntegration {
         return productDataAccess.save(productDto);
     }
 
-    public List<CartItemDto> cartItemsFactory(String prodId, List<RecipeDto> recipes) {
+    public List<CartItemDto> cartItemsFactory(String prodId, Set<String> recipes) {
         CartItemDto item = new CartItemDto();
         item.setProdId(prodId);
         if (recipes != null) {
@@ -56,7 +57,7 @@ public class BaseIntegration {
         return Arrays.asList(item);
     }
 
-    public CartItemDto cartItemFactory(String prodId, List<RecipeDto> recipes) {
+    public CartItemDto cartItemFactory(String prodId, Set<String> recipes) {
         CartItemDto item = new CartItemDto();
         item.setProdId(prodId);
         if (recipes != null) {

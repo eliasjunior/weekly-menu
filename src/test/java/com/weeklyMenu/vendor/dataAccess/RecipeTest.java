@@ -68,7 +68,7 @@ public class RecipeTest {
 
         List<ProdDetailDto> recipeItems = createList(Arrays.asList(prod1, prod2));
 
-        RecipeDto recipeToTest = RecipeFactory.createRecipeNoId(recipeItems);
+        RecipeDto recipeToTest = RecipeFactory.createRecipeDtoNoId(recipeItems);
 
         recipeAccessData.save(recipeToTest);
     }

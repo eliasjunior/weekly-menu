@@ -13,14 +13,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RecipeFactory {
-    public static RecipeDto createRecipe(List<ProdDetailDto> items) {
+    public static RecipeDto createRecipeDto(List<ProdDetailDto> items) {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setProdsDetail(items);
         recipeDto.setId(UUID.randomUUID().toString());
         return recipeDto;
     }
 
-    public static RecipeDto createRecipeNoId(List<ProdDetailDto> items) {
+    public static RecipeDto createRecipeDtoNoId(List<ProdDetailDto> items) {
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setProdsDetail(items);
         return recipeDto;
@@ -33,13 +33,7 @@ public class RecipeFactory {
         prodDetailDto.setQuantity(1);
         return prodDetailDto;
     }
-    public static ProdDetail createSingleProdDetail(Product product) {
-        ProdDetail prodDetail = new ProdDetail();
-        prodDetail.setProduct(product);
-        prodDetail.setQuantity(1);
-        return prodDetail;
-    }
-    public static List<ProdDetailDto> createSingleList(ProductDto productDto) {
+    public static List<ProdDetailDto> createSingleListProdDetailDto(ProductDto productDto) {
         ProdDetailDto prodDetailDto = new ProdDetailDto();
         prodDetailDto.setProdId(productDto.getId());
         prodDetailDto.setId(UUID.randomUUID().toString());
