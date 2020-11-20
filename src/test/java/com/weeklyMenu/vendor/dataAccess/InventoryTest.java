@@ -27,10 +27,6 @@ public class InventoryTest {
     CategoryDataAccess categoryDataAccess;
     @Autowired
     RecipeDataAccess recipeAccessData;
-    @Autowired
-    private ProductDataAccess productDataAccess;
-    @Autowired
-    private RecipeRepository recipeRepository;
 
     @Test
     public void testMapperDtoToEntity() {

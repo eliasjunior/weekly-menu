@@ -12,6 +12,7 @@ import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.helper.IdGenerator;
+import com.weeklyMenu.vendor.mapper.CartItemMapper;
 import com.weeklyMenu.vendor.mapper.CartMapper;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
 import com.weeklyMenu.vendor.model.Cart;
@@ -62,7 +63,7 @@ public class CartAccessDataImplTest {
 
     @Before
     public void setUp() {
-        baseIntegration = new BaseIntegration(categoryDataAccess, productDataAccess, recipeRepository);
+        baseIntegration = new BaseIntegration(categoryDataAccess, recipeRepository, productRepository);
     }
 
     @Test(expected = CustomValidationException.class)
@@ -105,11 +106,11 @@ public class CartAccessDataImplTest {
         ProductDto productDto = baseIntegration.createNewProduct();
         List<ProdDetailDto> prodDetailDtos = RecipeFactory.createSingleListProdDetailDto(productDto);
         prodDetailDtos.stream().forEach(prodDetailDto -> {
-           prodDetailRepository.save(recMapper.prodDetailDtoToProdDetail(prodDetailDto));
+            prodDetailRepository.save(recMapper.prodDetailDtoToProdDetail(prodDetailDto));
         });
         RecipeDto recipeDto = createRecipeDto(prodDetailDtos);
 
-        RecipeDto recipeDtoNew = recMapper.recipeToRecipeDto(recipeRepository.save( recMapper.recipeDtoToRecipe(recipeDto)));
+        RecipeDto recipeDtoNew = recMapper.recipeToRecipeDto(recipeRepository.save(recMapper.recipeDtoToRecipe(recipeDto)));
         String newUpdatedName = "Name Changed here";
         CartDto newCartDto = createCartWithRecipes(recipeDtoNew, productDto);
         newCartDto.setName(newUpdatedName);
@@ -146,11 +147,11 @@ public class CartAccessDataImplTest {
         RecipeDto recipeDto = createRecipeDto(prodDetailDtos);
 
         RecipeDto recipeDtoNew = recMapper.recipeToRecipeDto(recipeRepository.save(recMapper.recipeDtoToRecipe(recipeDto)));
-        CartDto newCartDto =  createCartWithRecipes(recipeDtoNew, productDto);
+        CartDto newCartDto = createCartWithRecipes(recipeDtoNew, productDto);
 
         assertEquals(1, newCartDto.getCartItems().size());
 
-        ProductDto newProduct = baseIntegration.createNewProduct("orange");
+        ProductDto newProduct = baseIntegration.createNewProduct();
 
         List<CartItemDto> cartItems = newCartDto.getCartItems();
 
@@ -158,23 +159,22 @@ public class CartAccessDataImplTest {
 
         newCartDto.setCartItems(cartItems);
 
-        cartDataAccess.update(newCartDto);
+        CartDto actualTest = cartDataAccess.update(newCartDto);
 
-        Cart cartUpdate = cartRepository.findById(newCartDto.getId()).get();
-
-        assertEquals(2, cartUpdate.getCartItems().size());
+        assertEquals(2, actualTest.getCartItems().size());
     }
 
     @Test
     public void test_remove_item_from_existing_cart() {
         CartMapper MAPPER = CartMapper.INSTANCE;
+        CartItemMapper cartItemMapper = new CartItemMapper();
 
-        ProductDto productDto1 = baseIntegration.createNewProduct("Water");
-        ProductDto productDto2 = baseIntegration.createNewProduct("Orange Juice");
+        ProductDto productDto1 = baseIntegration.createNewProduct("Water", UUID.randomUUID().toString());
+        ProductDto productDto2 = baseIntegration.createNewProduct("Orange Juice", UUID.randomUUID().toString());
 
-        CartItemDto item1 = baseIntegration.cartItemFactory(productDto1.getId(), null);
+        CartItemDto item1 = baseIntegration.cartItemDtoFactory(productDto1.getId(), null);
         item1.setId(UUID.randomUUID().toString());
-        CartItemDto item2 = baseIntegration.cartItemFactory(productDto2.getId(), null);
+        CartItemDto item2 = baseIntegration.cartItemDtoFactory(productDto2.getId(), null);
         item2.setId(UUID.randomUUID().toString());
 
         CartDto cartDto = new CartDto();
@@ -183,26 +183,31 @@ public class CartAccessDataImplTest {
         cartDto.setName("Tomorrow");
 
         Cart cart = MAPPER.dtoToCart(cartDto);
-      //  cart.setCartItems(MAPPER.cartItemsDtosToCartItems(cartDto.getCartItems()));
+        cart.setCartItems(cartItemMapper.cartItemDtosToCartItems(cartDto.getCartItems()));
         Cart newCart = cartRepository.save(cart);
+
+        newCart.getCartItems()
+                .stream()
+                .forEach(cartItem -> System.out.println(cartItem.getProduct().getName() + ": - " + cartItem.getProduct().getId()));
 
         List<CartItem> changedItems = newCart.getCartItems()
                 .stream()
                 .filter(cartItem -> cartItem.getProduct().getId() == productDto1.getId())
                 .collect(Collectors.toList());
 
-
+        // update cart items
         newCart.setCartItems(changedItems);
 
-        CartDto cartRequestDTO = MAPPER.cartToDto(newCart);
-     //   cartRequestDTO.setCartItems(MAPPER.cartItemsToCartItemsDtos(newCart.getCartItems()));
+        assertEquals(1, newCart.getCartItems().size());
 
-        assertEquals(1, cartRequestDTO.getCartItems().size());
+        CartDto cartRequestDTO = MAPPER.cartToDto(newCart);
+        cartRequestDTO.setCartItems(cartItemMapper.cartItemsToCartItemDtos(newCart.getCartItems()));
 
         // from here is the test the above should had being tested in another test
         cartDataAccess.update(cartRequestDTO);
 
         Cart cartEditedDB = cartRepository.findById(cartRequestDTO.getId()).get();
+        cartEditedDB.setCartItems(cartItemMapper.cartItemDtosToCartItems(cartRequestDTO.getCartItems()));
         assertEquals(1, cartEditedDB.getCartItems().size());
     }
 

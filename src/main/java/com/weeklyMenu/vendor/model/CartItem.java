@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -56,4 +57,6 @@ public class CartItem  {
             inverseJoinColumns =  @JoinColumn(name = "RECIPE_ID"))
     private Set<Recipe> selectedRecipes;
 
+    @Embedded
+    private BasicEntity basicEntity;
 }

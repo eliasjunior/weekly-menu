@@ -1,9 +1,8 @@
 package com.weeklyMenu.vendor.controller;
 
-import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.helpers.GlobalConstant;
 import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.dto.ProductDto;
+import com.weeklyMenu.helpers.GlobalConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +46,11 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> create(@RequestBody ProductDto productDto) {
         LOGGER.info("--> save");
-        boolean isCreated = productDataAccess.isProductNameUsed(productDto);
-        if (!isCreated) {
-            ProductDto newDto = productDataAccess.save(productDto);
-            return ResponseEntity
-                    .created(URI.create(String.format(GlobalConstant.BASE_URL + "/products/%s", newDto.getId())))
-                    .body(newDto);
-        } else {
-            throw new CustomValidationException("Name already exits ", new RuntimeException());
-        }
+        ProductDto newDto = productDataAccess.save(productDto);
+        return ResponseEntity
+                .created(URI.create(String.format(GlobalConstant.BASE_URL + "/products/%s", newDto.getId())))
+                .body(newDto);
+
     }
 
     @PutMapping

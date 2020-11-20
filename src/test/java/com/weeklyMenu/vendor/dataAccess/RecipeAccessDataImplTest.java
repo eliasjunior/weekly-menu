@@ -10,7 +10,9 @@ import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
+import com.weeklyMenu.vendor.mapper.RecipeMapper;
 import com.weeklyMenu.vendor.model.Recipe;
+import com.weeklyMenu.vendor.repository.ProductRepository;
 import com.weeklyMenu.vendor.repository.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,28 +25,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.weeklyMenu.RecipeFactory.createList;
+import static com.weeklyMenu.RecipeFactory.createProdDetailsDto;
 import static com.weeklyMenu.RecipeFactory.createSingleProdDetailDto;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RecipeTest {
+public class RecipeAccessDataImplTest {
     @Autowired
     CategoryDataAccess categoryDataAccess;
     @Autowired
     RecipeDataAccess recipeAccessData;
     @Autowired
-    private ProductDataAccess productDataAccess;
-    @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     BaseIntegration baseIntegration;
 
     @Before
     public void setUp() {
-        baseIntegration = new BaseIntegration(categoryDataAccess, productDataAccess, recipeRepository);
+        baseIntegration = new BaseIntegration(categoryDataAccess, recipeRepository, productRepository);
     }
 
     @Test(expected = CustomValidationException.class)
@@ -60,13 +62,13 @@ public class RecipeTest {
 
     @Test
     public void create_recipe_with_prods() {
-        CategoryDto categoryDto = this.baseIntegration.categoryFactory();
-        ProductDto prod1 = this.baseIntegration.productFactory(categoryDto.getId());
+        CategoryDto categoryDto = this.baseIntegration.createNewCategory();
+        ProductDto prod1 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
 
-        CategoryDto categoryDto2 = this.baseIntegration.categoryFactory();
-        ProductDto prod2 = this.baseIntegration.productFactory(categoryDto2.getId());
+        CategoryDto categoryDto2 = this.baseIntegration.createNewCategory();
+        ProductDto prod2 = this.baseIntegration.createNewProductGivenCategory(categoryDto2.getId());
 
-        List<ProdDetailDto> recipeItems = createList(Arrays.asList(prod1, prod2));
+        List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2));
 
         RecipeDto recipeToTest = RecipeFactory.createRecipeDtoNoId(recipeItems);
 
@@ -75,27 +77,26 @@ public class RecipeTest {
 
     @Test
     public void update_recipe_items_adding_new_item() {
-        CategoryDto categoryDto = this.baseIntegration.categoryFactory();
-        ProductDto prod1 = this.baseIntegration.productFactory(categoryDto.getId());
-        ProductDto prod2 = this.baseIntegration.productFactory(categoryDto.getId());
-        ProductDto newProdTo = this.baseIntegration.productFactory(categoryDto.getId());
+        RecipeMapper recipeMapper = RecipeMapper.INSTANCE;
+        CategoryDto categoryDto = this.baseIntegration.createNewCategory();
+        ProductDto prod1 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
+        ProductDto prod2 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
 
-        List<ProdDetailDto> recipeItems = createList(Arrays.asList(prod1, prod2));
+        List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2));
 
-        RecipeDto recipeToTest = this.baseIntegration.createRecipe(recipeItems);
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
 
-        assertEquals(2, recipeToTest.getProdsDetail().size());
+        Recipe recipeJustCreated = recipeRepository.save(recipeMapper.recipeDtoToRecipe(recipeToTest));
 
+        assertEquals(2, recipeJustCreated.getProdsDetail().size());
+
+        ProductDto prod3 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
         // Real testing bellow
-        ProdDetailDto detailDto = createSingleProdDetailDto(newProdTo);
+        ProdDetailDto detailDto = createSingleProdDetailDto(prod3);
 
-        List<ProdDetailDto> recipeItemsDto = recipeToTest.getProdsDetail();
+        recipeJustCreated.getProdsDetail().add(recipeMapper.prodDetailDtoToProdDetail(detailDto));
 
-        recipeItemsDto.add(detailDto);
-
-        recipeToTest.setProdsDetail(recipeItemsDto);
-
-        recipeAccessData.update(recipeToTest);
+        recipeAccessData.update(recipeMapper.recipeToRecipeDto(recipeJustCreated));
 
         Recipe recipeCheck = recipeRepository.findById(recipeToTest.getId()).get();
 
@@ -105,17 +106,17 @@ public class RecipeTest {
     @Test
     public void update_recipe_items_removing_item() {
         //cat 1 has 2 prod
-        CategoryDto categoryDto = this.baseIntegration.categoryFactory();
-        ProductDto prod1 = this.baseIntegration.productFactory(categoryDto.getId());
-        ProductDto prodToBeRemoved = this.baseIntegration.productFactory(categoryDto.getId());
+        CategoryDto categoryDto = this.baseIntegration.createNewCategory();
+        ProductDto prod1 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
+        ProductDto prodToBeRemoved = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
 
         //cat 2 has 1 prod
-        CategoryDto categoryDto2 = this.baseIntegration.categoryFactory();
-        ProductDto prod2 = this.baseIntegration.productFactory(categoryDto2.getId());
+        CategoryDto categoryDto2 = this.baseIntegration.createNewCategory();
+        ProductDto prod2 = this.baseIntegration.createNewProductGivenCategory(categoryDto2.getId());
 
-        List<ProdDetailDto> recipeItems = createList(Arrays.asList(prod1, prod2, prodToBeRemoved));
+        List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2, prodToBeRemoved));
 
-        RecipeDto recipeToTest = this.baseIntegration.createRecipe(recipeItems);
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
 
         assertEquals(3, recipeToTest.getProdsDetail().size());
 
@@ -136,20 +137,18 @@ public class RecipeTest {
 
     @Test
     public void update_items_adding_another_prod() {
+        //TODO review here, it says update, but save ?
         //cat 1 has 2 prod
-        CategoryDto categoryDto = this.baseIntegration.categoryFactory();
-        ProductDto prod1 = this.baseIntegration.productFactory(categoryDto.getId());
-
-        List<ProdDetailDto> recipeItems = createList(Arrays.asList(prod1));
-
-        RecipeDto recipeToTest = this.baseIntegration.createRecipe(recipeItems);
-
+        CategoryDto categoryDto = this.baseIntegration.createNewCategory();
+        ProductDto prod1 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
         // add second item with another prod
-        ProductDto prod2 = this.baseIntegration.productFactory(categoryDto.getId());
-        ProdDetailDto secondDetailDto = createSingleProdDetailDto(prod2);
+        ProductDto prod2 = this.baseIntegration.createNewProductGivenCategory(categoryDto.getId());
 
-        recipeToTest.getProdsDetail().add(secondDetailDto);
+        List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2));
 
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
+
+        //Test here
         RecipeDto created = recipeAccessData.save(recipeToTest);
 
         assertEquals(2, created.getProdsDetail().size());

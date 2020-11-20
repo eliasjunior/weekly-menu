@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -55,4 +56,6 @@ public class Recipe {
             prodDetail.setRecipe(this);
         }
     }
+    @Embedded
+    private BasicEntity basicEntity;
 }

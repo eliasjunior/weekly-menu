@@ -1,11 +1,13 @@
 package com.weeklyMenu.vendor.dataAccess;
 
 import com.weeklyMenu.domain.data.RecipeDataAccess;
+import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
+import com.weeklyMenu.vendor.model.Category;
 import com.weeklyMenu.vendor.model.ProdDetail;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
@@ -74,8 +76,9 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
             }
             oldRecipe = optional.get();
         }
-
-        this.recipeValidator.validateRecipeDto(recipeDto, this.validateProductsFromItems(recipeDto.getProdsDetail()));
+        validateInDB(recipeDto);
+        this.recipeValidator.validateRecipeDto(recipeDto,
+                this.validateProductsFromItems(recipeDto.getProdsDetail()));
 
         if (isNull(recipeDto.getId()) && !isUpdate) {
             recipeDto.setId(idGenerator.generateId());
@@ -90,7 +93,6 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
         Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
         newRecipe.linkAllToRecipe();
-
         return recipeRepository.save(newRecipe);
     }
 
@@ -116,16 +118,9 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
             throw new CustomValidationException("Recipe must has at least one product");
         }
 
-        for (ProdDetailDto detailDto : recipeItems) {
-            checkQuantity(detailDto.getQuantity());
-            if (Objects.nonNull(detailDto.getId())) {
-                Optional<ProdDetail> op = prodDetailRepository.findById(detailDto.getId());
-                if (!op.isPresent()) {
-                    throw new CustomValidationException("ProdDetail id verification, id=" +detailDto.getId() + " was not found");
-                }
-            }
-        }
-
+        // I cannot check id ProdDetail exists for recipe update because for the update case I can have
+        // some existing items and just add new one, this new one the prodDetailId will be not in the DB, there are other
+        // ways to check that, but will demand other changes or needs more investigation.
         List<Product> products = recipeItems
                 .stream()
                 .map(prodDetailDto -> checkProduct(prodDetailDto.getProdId()))
@@ -146,6 +141,20 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
     private void checkQuantity(Integer quantity) {
         if (Objects.isNull(quantity)) {
             throw new CustomValidationException("Product quantity from ProdDetail cannot be null");
+        }
+    }
+
+    private void validateInDB(RecipeDto dto) {
+        if(Objects.isNull(dto.getId())) {
+            Recipe recInDb = recipeRepository.findByNameIgnoreCase(dto.getName());
+            if( Objects.nonNull(recInDb)) {
+                throw new CustomValidationException("Attempt to save new recipe failed, recipe with this name already exists.");
+            }
+        } else {
+            Recipe recExisting = recipeRepository.findByNameIgnoreCaseAndIdIsDiff(dto.getName(), dto.getId());
+            if( Objects.nonNull(recExisting)) {
+                throw new CustomValidationException("Attempt to save a new recipe has failed because there is a recipe with the same name.");
+            }
         }
     }
 }

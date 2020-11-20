@@ -44,12 +44,7 @@ public class CategoryController {
     @PostMapping
     public CategoryDto create(@RequestBody CategoryDto dto) {
         LOGGER.info("--> save");
-        boolean isCreated = categoryDataAccess.isCategoryNameUsed(dto);
-        if(!isCreated) {
-            return categoryDataAccess.save(dto);
-        } else {
-            throw new CustomValidationException("Name already exits ", new RuntimeException());
-        }
+        return categoryDataAccess.save(dto);
     }
     @PutMapping
     public ResponseEntity<String> update(@RequestBody CategoryDto dto) {

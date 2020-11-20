@@ -1,9 +1,12 @@
 package com.weeklyMenu.vendor.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -14,6 +17,8 @@ import javax.persistence.Table;
 @Table(name = "PROD_DETAIL")
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProdDetail {
     @Id
     @Column(name = "ID")
@@ -31,4 +36,7 @@ public class ProdDetail {
     @ManyToOne
     @JoinColumn(name = "PROD_ID")
     private Product product;
+
+    @Embedded
+    private BasicEntity basicEntity;
 }

@@ -10,6 +10,7 @@ import com.weeklyMenu.vendor.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -38,6 +39,7 @@ public class ProductDataAccessImpl implements ProductDataAccess {
         if (dto.getId() == null) {
             dto.setId(idGenerator.generateId());
         }
+        validateInDB(dto);
         Product product = productRepository.save(MAPPER.productDtoToProduct(dto));
         return MAPPER.productToProductDto(product);
     }
@@ -48,7 +50,7 @@ public class ProductDataAccessImpl implements ProductDataAccess {
         if (!optional.isPresent()) {
             throw new CustomValidationException("Product not found to update", new RuntimeException());
         }
-
+        validateInDB(dto);
         productRepository.save(MAPPER.productDtoToProduct(dto));
     }
 
@@ -67,5 +69,19 @@ public class ProductDataAccessImpl implements ProductDataAccess {
     public boolean isProductNameUsed(ProductDto dto) {
         Product product = productRepository.findByName(dto.getName());
         return product != null;
+    }
+
+    private void validateInDB(ProductDto dto) {
+        if(Objects.isNull(dto.getId())) {
+            Product prodInDB = productRepository.findByNameIgnoreCase(dto.getName());
+            if( Objects.nonNull(prodInDB)) {
+                throw new CustomValidationException("Attempt to save new product failed, prod with this name already exists.");
+            }
+        } else {
+            Product prodExisting = productRepository.findByNameIgnoreCaseAndIdIsDiff(dto.getName(), dto.getId());
+            if( Objects.nonNull(prodExisting)) {
+                throw new CustomValidationException("Attempt to save a new product has failed because there is a prod with the same name.");
+            }
+        }
     }
 }

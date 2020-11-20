@@ -68,23 +68,12 @@ public class CartMapperTest {
         product.setName("Orange");
         product.setId("PROD_01");
 
-        Set<Recipe> recipes = new HashSet<>();
         Recipe recipe = new Recipe();
         recipe.setId("rec1");
 
-        CartItem item = new CartItem();
-        item.setProduct(product);
-        item.setSelectedRecipes(new HashSet<>(Arrays.asList( recipe)));
-        item.setName(product.getName());
-
-        cart.setCartItems(Arrays.asList(item));
         CartDto cartDto = CART_MAPPER.cartToDto(cart);
 
-        CartItemDto cartItemDto = cartDto.getCartItems().get(0);
         assertEquals(cart.getId(), cartDto.getId());
         assertEquals(cart.getName(), cartDto.getName());
-        assertEquals(item.getProduct().getId(), cartItemDto.getProdId());
-        assertEquals(item.getId(), cartItemDto.getId());
-        assertEquals(item.getName(), cartItemDto.getName());
     }
 }

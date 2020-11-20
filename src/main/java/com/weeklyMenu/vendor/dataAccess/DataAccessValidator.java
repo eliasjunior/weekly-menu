@@ -9,6 +9,7 @@ import com.weeklyMenu.vendor.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -63,6 +64,9 @@ public class DataAccessValidator {
     protected void validateCartDto(CartDto dto) {
         try {
             Objects.requireNonNull(dto.getCartItems(), "List<ProductItems> from CartDto cannot be null");
+            if(dto.getCartItems().size() == 0) {
+                throw new CustomValidationException("Attempt to create a new cart but there is not item");
+            }
             dto.getCartItems().forEach(item -> {
                 Objects.requireNonNull(item.getProdId(),
                         "Product (item) ID from cart is missing");

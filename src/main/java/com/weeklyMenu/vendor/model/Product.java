@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -44,4 +45,7 @@ public class Product {
     @ToString.Exclude
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProdDetail> prodsDetail;
+
+    @Embedded
+    private BasicEntity basicEntity;
 }

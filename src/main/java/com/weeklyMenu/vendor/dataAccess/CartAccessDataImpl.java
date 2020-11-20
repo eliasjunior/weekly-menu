@@ -8,7 +8,6 @@ import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.CartItemMapper;
 import com.weeklyMenu.vendor.mapper.CartMapper;
 import com.weeklyMenu.vendor.model.Cart;
-import com.weeklyMenu.vendor.model.CartItem;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.CartRepository;
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class CartAccessDataImpl implements CartDataAccess {
     final Logger LOGGER = LoggerFactory.getLogger(CartDataAccess.class);
-    private final CartRepository repository;
+    private final CartRepository cartRepository;
     private final RecipeRepository recipeRepository;
     private final ProductRepository productRepository;
     private final CartMapper MAPPER = CartMapper.INSTANCE;
@@ -39,11 +37,11 @@ public class CartAccessDataImpl implements CartDataAccess {
     private Map<String, Recipe> recipeLookup;
     CartItemMapper cartItemMapper = new CartItemMapper();
 
-    public CartAccessDataImpl(CartRepository repository,
+    public CartAccessDataImpl(CartRepository cartRepository,
                               RecipeRepository recipeRepository,
                               ProductRepository productRepository,
                               IdGenerator idGenerator, DataAccessValidator validator) {
-        this.repository = repository;
+        this.cartRepository = cartRepository;
         this.recipeRepository = recipeRepository;
         this.productRepository = productRepository;
         this.idGenerator = idGenerator;
@@ -52,43 +50,37 @@ public class CartAccessDataImpl implements CartDataAccess {
 
     @Override
     public List<CartDto> getCartList() {
-        List<Cart> listDto = repository.findAll();
-        listDto.forEach(cart -> {
-            System.out.println(cart.getCartItems());
-        });
+        List<Cart> listDto = cartRepository.findAllActives();
         return MAPPER.cartsToCartDtos(listDto);
     }
 
     @Override
     public CartDto save(CartDto dto) {
-        LOGGER.debug("save", dto.toString());
+        LOGGER.debug("--- save --- " + dto.toString());
         this.validator.validateCartDto(dto);
         if (dto.getId() == null) {
             dto.setId(idGenerator.generateId());
             dto.setCartItems(generateIdProdItem(dto.getCartItems()));
         }
-        Cart cartNew = saveCart(dto);
-        CartDto cartDto = MAPPER.cartToDto(cartNew);
-        cartDto.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cartNew.getCartItems()));
-        return cartDto;
+        return saveCart(dto);
     }
 
     @Override
-    public void update(CartDto dto) {
-        LOGGER.debug("update", dto.toString());
+    public CartDto update(CartDto dto) {
+        LOGGER.debug("--- update --- " + dto.toString());
         this.validator.validateCartDto(dto);
         dto.setCartItems(generateIdProdItem(dto.getCartItems()));
-        Optional<Cart> optional = repository.findById(dto.getId());
+        Optional<Cart> optional = cartRepository.findById(dto.getId());
         if (!optional.isPresent()) {
             throw new CustomValidationException("Shopping list not found to update");
         }
 
-        saveCart(dto);
+        return saveCart(dto);
     }
 
     @Override
     public void delete(String id) {
-        repository.deleteById(id);
+        cartRepository.deleteById(id);
     }
 
     private List<CartItemDto> generateIdProdItem(List<CartItemDto> dtoItems) {
@@ -97,31 +89,28 @@ public class CartAccessDataImpl implements CartDataAccess {
         }
         return dtoItems
                 .stream()
-                .map(productItemDto -> {
-                    if (Objects.isNull(productItemDto.getId())) {
-                        productItemDto.setId(idGenerator.generateId());
+                .map(cartItemDto -> {
+                    if (Objects.isNull(cartItemDto.getId())) {
+                        cartItemDto.setId(idGenerator.generateId());
                     }
-                    return productItemDto;
+                    return cartItemDto;
                 })
                 .collect(Collectors.toList());
     }
 
-    private Cart saveCart(CartDto dto) {
-
+    private CartDto saveCart(CartDto dto) {
         Cart cart = MAPPER.dtoToCart(dto);
-        dto.getCartItems().forEach(cartItemDto -> validateRecipes(cartItemDto.getRecipes()));
+        dto.getCartItems().forEach(cartItemDto ->  {
+            validateRecipes(cartItemDto.getRecipes());
+            validateProduct(cartItemDto.getProdId());
+        });
         cart.setCartItems(cartItemMapper.cartItemDtosToCartItems(dto.getCartItems()));
 
-        //TODO test if the converstion works
-       // cart.setCartItems(ITEM_MAPPER.cartItemDtoToCartItem(dto.getCartItems()));
-//        cart.getCartItems().forEach(cartItem -> {
-//            // if remove the validation it will save only with the ID, maybe try to use more the constraints to validate ?
-//            cartItem.setSelectedRecipes(validateRecipes());
-//            cartItem.setProduct(fillProduct(cartItem.getProduct()));
-//            cartItem.setCart(cart);
-//        });
-        Cart newCart = repository.save(cart);
-        return newCart;
+        Cart cartNew =  cartRepository.save(cart);
+        CartDto cartDto = MAPPER.cartToDto(cartNew);
+        cartDto.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cartNew.getCartItems()));
+
+        return cartDto;
     }
 
     private void validateRecipes(Set<String> recipes) {
@@ -142,14 +131,11 @@ public class CartAccessDataImpl implements CartDataAccess {
         }
     }
 
-    private Product fillProduct(Product product) {
-        Optional<Product> prodIn = productRepository.findById(product.getId());
-        if (prodIn.isPresent()) {
-            return prodIn.get();
-        } else {
-            String msgError = "Attempt to save cartItem but product does not, exist id=" + product.getId();
+    private void validateProduct(String prodId) {
+        Optional<Product> prodIn = productRepository.findById(prodId);
+        if (!prodIn.isPresent()) {
+            String msgError = "Attempt to save cartItem but product does not, exist id=" + prodId;
             throw new CustomValidationException(msgError);
         }
     }
-
 }

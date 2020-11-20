@@ -18,6 +18,4 @@ public interface CategoryDataAccess {
     void delete(String id);
     
     CategoryDto getCategory(String id);
-
-    boolean isCategoryNameUsed(CategoryDto dto);
 }

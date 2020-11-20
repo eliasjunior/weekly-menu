@@ -9,7 +9,7 @@ public interface CartDataAccess {
 
     CartDto save(CartDto shoppingList);
 
-    void update(CartDto dto);
+    CartDto update(CartDto dto);
 
     void delete(String id);
 }
