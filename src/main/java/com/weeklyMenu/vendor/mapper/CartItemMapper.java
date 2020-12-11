@@ -1,6 +1,7 @@
 package com.weeklyMenu.vendor.mapper;
 
 import com.weeklyMenu.dto.CartItemDto;
+import com.weeklyMenu.vendor.model.BasicEntity;
 import com.weeklyMenu.vendor.model.CartItem;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
@@ -38,6 +39,7 @@ public class CartItemMapper {
                 .product(Product.builder().id(itemDto.getProdId()).build())
                 .selected(itemDto.isSelected())
                 .selectedRecipes(buildRecipe(itemDto.getRecipes()))
+                .basicEntity(new BasicEntity())
                 .build()).collect(Collectors.toList());
     }
 

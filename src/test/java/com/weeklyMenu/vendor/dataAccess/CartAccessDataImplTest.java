@@ -45,8 +45,6 @@ public class CartAccessDataImplTest {
     @Autowired
     private CategoryDataAccess categoryDataAccess;
     @Autowired
-    private ProductDataAccess productDataAccess;
-    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private CartRepository cartRepository;

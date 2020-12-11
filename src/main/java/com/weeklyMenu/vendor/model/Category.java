@@ -13,7 +13,11 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
+
+import static com.weeklyMenu.helpers.GlobalConstant.STATUS_ACTIVE;
 
 @Table(name = "CATEGORY")
 @Entity
@@ -23,9 +27,11 @@ import java.util.List;
 public class Category {
     @Id
     @Column(name = "ID")
+    @NotNull
     private String id;
 
-    @Column(name = "NAME")
+    @NotNull
+    @Column(name = "NAME", unique=true)
     private String name;
 
     @ToString.Exclude
@@ -33,5 +39,9 @@ public class Category {
     private List<Product> products;
 
     @Embedded
-    private BasicEntity basicEntity;
+    private BasicEntity basicEntity = new BasicEntity();
+
+    public void updateBasic(BasicEntity basicEntity) {
+        this.getBasicEntity().updateBasic(basicEntity);
+    }
 }

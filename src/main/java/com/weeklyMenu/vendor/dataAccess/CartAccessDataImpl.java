@@ -8,6 +8,7 @@ import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.CartItemMapper;
 import com.weeklyMenu.vendor.mapper.CartMapper;
 import com.weeklyMenu.vendor.model.Cart;
+import com.weeklyMenu.vendor.model.CartItem;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.CartRepository;
@@ -50,8 +51,15 @@ public class CartAccessDataImpl implements CartDataAccess {
 
     @Override
     public List<CartDto> getCartList() {
-        List<Cart> listDto = cartRepository.findAllActives();
-        return MAPPER.cartsToCartDtos(listDto);
+        List<Cart> carts = cartRepository.findAllActives();
+        List<CartDto> cartsDto = MAPPER.cartsToCartDtos(carts);
+        int i = 0;
+        for (Cart cart : carts) {
+            CartDto cartDto = cartsDto.get(i);
+            cartDto.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cart.getCartItems()));
+            i++;
+        }
+        return cartsDto;
     }
 
     @Override
@@ -62,7 +70,7 @@ public class CartAccessDataImpl implements CartDataAccess {
             dto.setId(idGenerator.generateId());
             dto.setCartItems(generateIdProdItem(dto.getCartItems()));
         }
-        return saveCart(dto);
+        return saveCart(dto, null);
     }
 
     @Override
@@ -72,10 +80,18 @@ public class CartAccessDataImpl implements CartDataAccess {
         dto.setCartItems(generateIdProdItem(dto.getCartItems()));
         Optional<Cart> optional = cartRepository.findById(dto.getId());
         if (!optional.isPresent()) {
-            throw new CustomValidationException("Shopping list not found to update");
+            throw new CustomValidationException("Update failed because the cart id sent by the request was not found!");
         }
-
-        return saveCart(dto);
+        Cart inBdCart = optional.get();
+        // validate if cartItem has already the product
+        for (CartItemDto itemDto : dto.getCartItems()) {
+            if(!containsItem(inBdCart.getCartItems(), itemDto.getId())) {
+                if(containsProdInCart(inBdCart.getCartItems(), itemDto.getProdId())) {
+                    throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
+                }
+            }
+        }
+        return saveCart(dto, inBdCart);
     }
 
     @Override
@@ -98,19 +114,44 @@ public class CartAccessDataImpl implements CartDataAccess {
                 .collect(Collectors.toList());
     }
 
-    private CartDto saveCart(CartDto dto) {
-        Cart cart = MAPPER.dtoToCart(dto);
+    private CartDto saveCart(CartDto dto, Cart cartUpdate) {
         dto.getCartItems().forEach(cartItemDto ->  {
             validateRecipes(cartItemDto.getRecipes());
             validateProduct(cartItemDto.getProdId());
         });
+
+        Cart cart = MAPPER.dtoToCart(dto);
+
         cart.setCartItems(cartItemMapper.cartItemDtosToCartItems(dto.getCartItems()));
+
+        if(cartUpdate != null) {
+            cart.linkItemsToCart(cartUpdate.getBasicEntity(), cartUpdate.getCartItems());
+            cartUpdate.removeAllItems();
+        } else {
+            cart.linkItemsToCart(null);
+        }
 
         Cart cartNew =  cartRepository.save(cart);
         CartDto cartDto = MAPPER.cartToDto(cartNew);
         cartDto.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cartNew.getCartItems()));
 
         return cartDto;
+    }
+
+    private boolean containsItem(final List<CartItem> list, final String id){
+        return list
+                .stream()
+                .filter(cartItem -> cartItem.getId().equals(id))
+                .findFirst()
+                .isPresent();
+    }
+
+    private boolean containsProdInCart(final List<CartItem> list, final String prodId){
+        return list
+                .stream()
+                .filter(cartItem -> cartItem.getProduct().getId().equals(prodId))
+                .findFirst()
+                .isPresent();
     }
 
     private void validateRecipes(Set<String> recipes) {

@@ -5,10 +5,13 @@ import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.domain.data.ProductDataAccess;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.helper.IdGenerator;
+import com.weeklyMenu.vendor.model.BasicEntity;
+import com.weeklyMenu.vendor.model.Cart;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,8 +43,11 @@ public class ProductDataAccessImpl implements ProductDataAccess {
             dto.setId(idGenerator.generateId());
         }
         validateInDB(dto);
-        Product product = productRepository.save(MAPPER.productDtoToProduct(dto));
-        return MAPPER.productToProductDto(product);
+
+        Product product = MAPPER.productDtoToProduct(dto);
+        product.updateBasic(null);
+
+        return MAPPER.productToProductDto(productRepository.save(product));
     }
 
     @Override
@@ -51,7 +57,14 @@ public class ProductDataAccessImpl implements ProductDataAccess {
             throw new CustomValidationException("Product not found to update", new RuntimeException());
         }
         validateInDB(dto);
-        productRepository.save(MAPPER.productDtoToProduct(dto));
+        Product product = MAPPER.productDtoToProduct(dto);
+        Optional<Product> optProduct = productRepository.findById(product.getId());
+        Product inBdProduct = optProduct.get();
+        if(Objects.isNull(optProduct.get())) {
+            throw new CustomValidationException("Update failed because the product id sent by the request was not found!");
+        }
+        product.updateBasic(inBdProduct.getBasicEntity());
+        productRepository.save(product);
     }
 
     @Override

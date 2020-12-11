@@ -1,14 +1,11 @@
 package com.weeklyMenu.vendor.dataAccess;
 
 import com.weeklyMenu.domain.data.RecipeDataAccess;
-import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.exceptions.CustomValidationException;
 import com.weeklyMenu.vendor.helper.IdGenerator;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.ProdDetail;
 import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.ProdDetailRepository;
@@ -86,13 +83,21 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
         recipeDto.generateItemsIds(idGenerator);
 
-        if (isUpdate) {
-            //remove all children to be add again afterwards
-            oldRecipe.removeAllItems();
-        }
+        //remove all children to be add again afterwards
+        oldRecipe.removeAllItems(isUpdate);
 
         Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
-        newRecipe.linkAllToRecipe();
+
+        if(isUpdate) {
+            Optional<Recipe> optRec = recipeRepository.findById(newRecipe.getId());
+            Recipe inBdRecipe = optRec.get();
+            if (Objects.isNull(optRec.get())) {
+                throw new CustomValidationException("Update failed because the recipe id sent by the request was not found!");
+            }
+            newRecipe.linkAllToRecipe(inBdRecipe.getBasicEntity());
+        } else {
+            newRecipe.linkAllToRecipe(null);
+        }
         return recipeRepository.save(newRecipe);
     }
 
@@ -138,21 +143,15 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
         return productRepository.findById(productId);
     }
 
-    private void checkQuantity(Integer quantity) {
-        if (Objects.isNull(quantity)) {
-            throw new CustomValidationException("Product quantity from ProdDetail cannot be null");
-        }
-    }
-
     private void validateInDB(RecipeDto dto) {
-        if(Objects.isNull(dto.getId())) {
+        if (Objects.isNull(dto.getId())) {
             Recipe recInDb = recipeRepository.findByNameIgnoreCase(dto.getName());
-            if( Objects.nonNull(recInDb)) {
+            if (Objects.nonNull(recInDb)) {
                 throw new CustomValidationException("Attempt to save new recipe failed, recipe with this name already exists.");
             }
         } else {
             Recipe recExisting = recipeRepository.findByNameIgnoreCaseAndIdIsDiff(dto.getName(), dto.getId());
-            if( Objects.nonNull(recExisting)) {
+            if (Objects.nonNull(recExisting)) {
                 throw new CustomValidationException("Attempt to save a new recipe has failed because there is a recipe with the same name.");
             }
         }

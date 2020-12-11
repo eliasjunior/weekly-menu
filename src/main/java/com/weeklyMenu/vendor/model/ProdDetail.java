@@ -38,5 +38,5 @@ public class ProdDetail {
     private Product product;
 
     @Embedded
-    private BasicEntity basicEntity;
+    private BasicEntity basicEntity = new BasicEntity();
 }

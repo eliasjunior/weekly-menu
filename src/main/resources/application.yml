@@ -1,0 +1,26 @@
+server:
+    port: 8082
+spring:
+    datasource:
+        password: 1234
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+
+
+                format_sql: false
+        show-sql: false
+    output:
+        ansi:
+            enabled: always
+logging:
+    level:
+        com:
+            weeklyMenu: DEBUG

@@ -11,6 +11,7 @@ import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,7 +44,6 @@ public class CategoryDataAccessImpl implements CategoryDataAccess {
             categoryDTO.setId(idGenerator.generateId());
         }
 
-        //TODO move this later
         if (categoryDTO.getProdIds() != null && categoryDTO.getProdIds().size() > 0) {
             categoryDTO.setProducts(categoryDTO.getProdIds()
                     .stream()
@@ -51,7 +51,9 @@ public class CategoryDataAccessImpl implements CategoryDataAccess {
                     .collect(Collectors.toList()));
         }
         validateInDB(categoryDTO);
-        return MAPPER.categoryToCategoryDto(categoryRepository.save(MAPPER.categoryDtoToCategory(categoryDTO)));
+        Category category = MAPPER.categoryDtoToCategory(categoryDTO);
+        category.updateBasic(null);
+        return MAPPER.categoryToCategoryDto(categoryRepository.save(category));
     }
 
     @Override
@@ -61,7 +63,15 @@ public class CategoryDataAccessImpl implements CategoryDataAccess {
             throw new CustomValidationException("Category not found to update", new RuntimeException());
         }
         validateInDB(dto);
-        categoryRepository.save(MAPPER.categoryDtoToCategory(dto));
+        Category category = MAPPER.categoryDtoToCategory(dto);
+        Optional<Category> optCat = categoryRepository.findById(category.getId());
+        Category inBdCategory = optCat.get();
+        if(Objects.isNull(optCat.get())) {
+            throw new CustomValidationException("Update failed because the category id sent by the request was not found!");
+        }
+        category.setBasicEntity(inBdCategory.getBasicEntity());
+        category.updateBasic(inBdCategory.getBasicEntity());
+        categoryRepository.save(category);
     }
 
     @Override

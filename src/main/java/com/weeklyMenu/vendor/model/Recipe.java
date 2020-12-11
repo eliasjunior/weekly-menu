@@ -15,10 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import static com.weeklyMenu.helpers.GlobalConstant.STATUS_ACTIVE;
 
 @Table(name = "RECIPE")
 @Entity
@@ -29,9 +33,11 @@ import java.util.Set;
 public class Recipe {
     @Id
     @Column(name = "ID")
+    @NotNull
     private String id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique=true)
+    @NotNull
     private String name;
 
     @ToString.Exclude
@@ -41,21 +47,25 @@ public class Recipe {
     @ManyToMany(mappedBy = "selectedRecipes")
     private Set<CartItem> cartItems;
 
-    public void removeAllItems() {
-        Iterator<ProdDetail> iterator = this.getProdsDetail().iterator();
-        while (iterator.hasNext()) {
-            ProdDetail prodDetail = iterator.next();
-            prodDetail.setRecipe(null);
+    public void removeAllItems(boolean isUpdate) {
+        if(isUpdate) {
+            Iterator<ProdDetail> iterator = this.getProdsDetail().iterator();
+            while (iterator.hasNext()) {
+                ProdDetail prodDetail = iterator.next();
+                prodDetail.setRecipe(null);
+            }
+            this.getProdsDetail().clear();
         }
-        this.getProdsDetail().clear();
     }
 
-    public void linkAllToRecipe() {
-        for (int i = 0; i <  this.getProdsDetail().size(); i++) {
-            ProdDetail prodDetail = this.getProdsDetail().get(i);
+    public void linkAllToRecipe(BasicEntity basicEntity) {
+        this.getBasicEntity().updateBasic(basicEntity);
+
+        for (ProdDetail prodDetail: this.getProdsDetail()) {
             prodDetail.setRecipe(this);
+            prodDetail.getBasicEntity().updateBasic(prodDetail.getBasicEntity());
         }
     }
     @Embedded
-    private BasicEntity basicEntity;
+    private BasicEntity basicEntity = new BasicEntity();
 }
