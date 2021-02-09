@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class RecipeFactory {
     public static RecipeDto createRecipeDto(List<ProdDetailDto> items) {
         RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setName("Coco");
         recipeDto.setProdsDetail(items);
         recipeDto.setId(UUID.randomUUID().toString());
         return recipeDto;
@@ -19,6 +20,7 @@ public class RecipeFactory {
 
     public static RecipeDto createRecipeDtoNoId(List<ProdDetailDto> items) {
         RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setName("Cake");
         recipeDto.setProdsDetail(items);
         return recipeDto;
     }

@@ -17,6 +17,7 @@ public class TestHelper {
     public static Category createCategory(CategoryRepository repository) {
         Category category = new Category();
         category.setId("cat_01");
+        category.setName("Seeds");
         return repository.save(category);
     }
 }

@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RecipeAccessDataImplTest {
     @Autowired
     CategoryDataAccess categoryDataAccess;
@@ -84,7 +84,7 @@ public class RecipeAccessDataImplTest {
 
         List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2));
 
-        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems, "tete");
 
         Recipe recipeJustCreated = recipeRepository.save(recipeMapper.recipeDtoToRecipe(recipeToTest));
 
@@ -116,7 +116,7 @@ public class RecipeAccessDataImplTest {
 
         List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2, prodToBeRemoved));
 
-        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems, "Apple juice");
 
         assertEquals(3, recipeToTest.getProdsDetail().size());
 
@@ -146,7 +146,7 @@ public class RecipeAccessDataImplTest {
 
         List<ProdDetailDto> recipeItems = createProdDetailsDto(Arrays.asList(prod1, prod2));
 
-        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems);
+        RecipeDto recipeToTest = this.baseIntegration.createRecipeDto(recipeItems, "Milk");
 
         //Test here
         RecipeDto created = recipeAccessData.save(recipeToTest);

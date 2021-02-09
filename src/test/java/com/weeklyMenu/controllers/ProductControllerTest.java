@@ -47,6 +47,7 @@ public class ProductControllerTest {
         Category category = createCategory(categoryRepository);
         String productDto = "{\n" +
                 "  \"name\": \"Chuck\"," +
+                "  \"quantityType\": \"u\"," +
                 "  \"catId\": \""+category.getId() + "\"" +
                 "}";
 
@@ -57,13 +58,6 @@ public class ProductControllerTest {
                 .then()
                 .statusCode(201)
                 .assertThat();
-
-//        when()
-//                .get(GlobalConstant.BASE_URL + "/products")
-//                .then()
-//                .statusCode(200)
-//                .assertThat()
-//                .body("name", hasItems("Chuck"));
     }
 
     @Test
@@ -83,6 +77,7 @@ public class ProductControllerTest {
         String productDto = "{\n" +
                 "  \"name\": \"Van Damme\"," +
                 "  \"id\": \""+product.getId() + "\"," +
+                "  \"quantityType\": \"u\"," +
                 "  \"catId\": \""+category.getId() + "\"" +
                 "}";
 

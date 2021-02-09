@@ -8,4 +8,7 @@
     - delete cart  ?
     
 ### Add the front app and check against
+
+
+Running psql sh scripts/runpsql.sh
     

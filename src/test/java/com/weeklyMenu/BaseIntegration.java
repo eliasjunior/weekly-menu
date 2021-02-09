@@ -44,13 +44,13 @@ public class BaseIntegration {
 
     public ProductDto productFactory(String catId, String name, String id) {
         InventoryMapper MAPPER = InventoryMapper.INSTANCE;
-        Product product = new Product(id, name, null, new Category(catId, null, null, null), null, null);
+        Product product = new Product(id, name, "u", new Category(catId, null, null, null), null, null);
         return MAPPER.productToProductDto(productRepository.save(product));
     }
 
     public ProductDto createNewProductGivenCategory(String catId) {
         InventoryMapper MAPPER = InventoryMapper.INSTANCE;
-        Product product = new Product(UUID.randomUUID().toString(), "NoName", null, new Category(catId, null, null, null), null, null);
+        Product product = new Product(UUID.randomUUID().toString(), "NoName", "u", new Category(catId, null, null, null), null, null);
         return MAPPER.productToProductDto(productRepository.save(product));
     }
 
@@ -81,8 +81,9 @@ public class BaseIntegration {
         return item;
     }
 
-    public RecipeDto createRecipeDto(List<ProdDetailDto> recipeItems) {
+    public RecipeDto createRecipeDto(List<ProdDetailDto> recipeItems, String recipeName) {
         Recipe recipe = new Recipe();
+        recipe.setName(recipeName);
         recipe.setId(UUID.randomUUID().toString());
         recipe.setProdsDetail(RECIPE_MAPPER.recipeItemsDtosToRecipeItems(recipeItems));
         Recipe newRecipe = recipeRepository.save(recipe);
