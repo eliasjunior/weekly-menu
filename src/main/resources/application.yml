@@ -13,8 +13,6 @@ spring:
                 jdbc:
                     lob:
                         non_contextual_creation: true
-
-
                 format_sql: false
         show-sql: false
     output:
