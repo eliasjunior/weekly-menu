@@ -2,9 +2,9 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/eliasjunior/weekly-menu-react/blob/master/public/favicon.png">
-    <img src="public/favicon.png" alt="Logo" width="80" height="80">
-  </a>
+ <a href="https://github.com/eliasjunior/weekly-menu/blob/master/docs/favicon.png">
+    <img src="docs/favicon.png" alt="Logo" width="200px" height="225px">
+ </a>
 
   <h3 align="center">Weekly Menu</h3>
 
@@ -39,15 +39,11 @@
 
 ## About The Project
 
-<p >
-    <a href="https://github.com/eliasjunior/weekly-menu-react/blob/master/public/recipe/book.png">
-        <img src="public/recipe/book.png" alt="Logo" width="200px" height="225px">
-    </a>
-</p>
-
+See [UI](https://github.com/eliasjunior/weekly-menu-react)
 
 ## Usage
 
+In development
 
 
     
