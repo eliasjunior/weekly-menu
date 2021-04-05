@@ -53,52 +53,52 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
     @Override
     public RecipeDto save(RecipeDto recipeDto) {
-        LOGGER.debug("save", recipeDto.toString());
-        Recipe recipe = this.saveAndValidate(recipeDto, false);
-        return MAPPER.recipeToRecipeDto(recipe);
-    }
-
-    @Override
-    public void update(RecipeDto dto) {
-        LOGGER.debug("update", dto.toString());
-        this.saveAndValidate(dto, true);
-    }
-
-    private Recipe saveAndValidate(RecipeDto recipeDto, boolean isUpdate) {
-        Recipe oldRecipe = new Recipe();
-        if (isUpdate) {
-            Optional<Recipe> optional = recipeRepository.findById(recipeDto.getId());
-            if (!optional.isPresent()) {
-                throw new CustomValidationException("Recipe not found to update");
-            }
-            oldRecipe = optional.get();
-        }
+        LOGGER.debug("save" + recipeDto.toString());
         validateInDB(recipeDto);
         this.recipeValidator.validateRecipeDto(recipeDto,
                 this.validateProductsFromItems(recipeDto.getProdsDetail()));
 
-        if (isNull(recipeDto.getId()) && !isUpdate) {
+        if (isNull(recipeDto.getId()) ) {
             recipeDto.setId(idGenerator.generateId());
         }
 
         recipeDto.generateItemsIds(idGenerator);
 
+        Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
+
+        newRecipe.linkAllToRecipe(null);
+        return MAPPER.recipeToRecipeDto( recipeRepository.save(newRecipe));
+    }
+
+    @Override
+    public void update(RecipeDto recipeDto) {
+        LOGGER.debug("update" + recipeDto.toString());
+        validateInDB(recipeDto);
+        Recipe oldRecipe;
+        Optional<Recipe> optional = recipeRepository.findById(recipeDto.getId());
+        if (!optional.isPresent()) {
+            throw new CustomValidationException("Recipe not found to update");
+        }
+        oldRecipe = optional.get();
+
+        this.recipeValidator.validateRecipeDto(recipeDto,
+                this.validateProductsFromItems(recipeDto.getProdsDetail()));
+
+        recipeDto.generateItemsIds(idGenerator);
         //remove all children to be add again afterwards
-        oldRecipe.removeAllItems(isUpdate);
+
+        oldRecipe.removeAllItems(true);
 
         Recipe newRecipe = MAPPER.recipeDtoToRecipe(recipeDto);
 
-        if(isUpdate) {
-            Optional<Recipe> optRec = recipeRepository.findById(newRecipe.getId());
-            Recipe inBdRecipe = optRec.get();
-            if (Objects.isNull(optRec.get())) {
-                throw new CustomValidationException("Update failed because the recipe id sent by the request was not found!");
-            }
-            newRecipe.linkAllToRecipe(inBdRecipe.getBasicEntity());
-        } else {
-            newRecipe.linkAllToRecipe(null);
+        Optional<Recipe> optRec = recipeRepository.findById(newRecipe.getId());
+        if (!optRec.isPresent()) {
+            throw new CustomValidationException("Update failed because the recipe id sent by the request was not found!");
         }
-        return recipeRepository.save(newRecipe);
+        Recipe inBdRecipe = optRec.get();
+        newRecipe.linkAllToRecipe(inBdRecipe.getBasicEntity());
+
+        recipeRepository.save(newRecipe);
     }
 
     @Override
@@ -108,7 +108,11 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
 
     @Override
     public RecipeDto getRecipe(String id) {
-        return MAPPER.recipeToRecipeDto(recipeRepository.findById(id).get());
+        Optional<Recipe> optional = recipeRepository.findById(id);
+        if(optional.isPresent()) {
+            return MAPPER.recipeToRecipeDto(optional.get());
+        }
+        throw new CustomValidationException("Attempt to load recipe has failed");
     }
 
     @Override
@@ -122,18 +126,15 @@ public class RecipeAccessDataImpl implements RecipeDataAccess {
         if (Objects.isNull(recipeItems) || recipeItems.size() == 0) {
             throw new CustomValidationException("Recipe must has at least one product");
         }
-
         // I cannot check id ProdDetail exists for recipe update because for the update case I can have
         // some existing items and just add new one, this new one the prodDetailId will be not in the DB, there are other
         // ways to check that, but will demand other changes or needs more investigation.
-        List<Product> products = recipeItems
+        return recipeItems
                 .stream()
                 .map(prodDetailDto -> checkProduct(prodDetailDto.getProdId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
-
-        return products;
     }
 
     private Optional<Product> checkProduct(String productId) {

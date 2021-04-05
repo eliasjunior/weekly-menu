@@ -105,11 +105,10 @@ public class CartAccessDataImpl implements CartDataAccess {
         }
         return dtoItems
                 .stream()
-                .map(cartItemDto -> {
+                .peek(cartItemDto -> {
                     if (Objects.isNull(cartItemDto.getId())) {
                         cartItemDto.setId(idGenerator.generateId());
                     }
-                    return cartItemDto;
                 })
                 .collect(Collectors.toList());
     }
@@ -141,23 +140,19 @@ public class CartAccessDataImpl implements CartDataAccess {
     private boolean containsItem(final List<CartItem> list, final String id){
         return list
                 .stream()
-                .filter(cartItem -> cartItem.getId().equals(id))
-                .findFirst()
-                .isPresent();
+                .anyMatch(cartItem -> cartItem.getId().equals(id));
     }
 
     private boolean containsProdInCart(final List<CartItem> list, final String prodId){
         return list
                 .stream()
-                .filter(cartItem -> cartItem.getProduct().getId().equals(prodId))
-                .findFirst()
-                .isPresent();
+                .anyMatch(cartItem -> cartItem.getProduct().getId().equals(prodId));
     }
 
     private void validateRecipes(Set<String> recipes) {
         if (Objects.nonNull(recipes)) {
             if (Objects.isNull(recipeLookup)) {
-                recipeLookup = new HashMap();
+                recipeLookup = new HashMap<>();
             }
             for (String id : recipes) {
                 Recipe recIn = recipeLookup.get(id);
