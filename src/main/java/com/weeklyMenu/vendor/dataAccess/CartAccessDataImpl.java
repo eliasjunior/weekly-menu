@@ -53,11 +53,10 @@ public class CartAccessDataImpl implements CartDataAccess {
     public List<CartDto> getCartList() {
         List<Cart> carts = cartRepository.findAllActives();
         List<CartDto> cartsDto = MAPPER.cartsToCartDtos(carts);
-        int i = 0;
-        for (Cart cart : carts) {
+        for (int i = 0; i < carts.size(); i++) {
+            Cart cart = carts.get(i);
             CartDto cartDto = cartsDto.get(i);
             cartDto.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cart.getCartItems()));
-            i++;
         }
         return cartsDto;
     }
@@ -85,10 +84,8 @@ public class CartAccessDataImpl implements CartDataAccess {
         Cart inBdCart = optional.get();
         // validate if cartItem has already the product
         for (CartItemDto itemDto : dto.getCartItems()) {
-            if(!containsItem(inBdCart.getCartItems(), itemDto.getId())) {
-                if(containsProdInCart(inBdCart.getCartItems(), itemDto.getProdId())) {
-                    throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
-                }
+            if(!containsItem(inBdCart.getCartItems(), itemDto.getId()) && containsProdInCart(inBdCart.getCartItems(), itemDto.getProdId())) {
+                throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
             }
         }
         return saveCart(dto, inBdCart);
