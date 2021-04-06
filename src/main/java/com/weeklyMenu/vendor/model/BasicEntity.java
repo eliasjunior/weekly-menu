@@ -1,11 +1,7 @@
 package com.weeklyMenu.vendor.model;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -27,7 +23,7 @@ public class BasicEntity {
     private String status;
 
     public void updateBasic(BasicEntity inDb) {
-        if(inDb == null) {
+        if (inDb == null) {
             this.setDateCreated(new Date().toString());
             this.setStatus(STATUS_ACTIVE);
         } else {
