@@ -54,11 +54,7 @@ Front-end [React UI](https://github.com/eliasjunior/weekly-menu-react)
 ### Architecture
 <p align="center">
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/clean-architecture.png">
-<<<<<<< HEAD
-        <img src="docs/clean-architecture.png" alt="Logo" width="100%" height="100%">
-=======
         <img src="docs/clean-architecture.png" alt="architecture" width="100%" height="100%">
->>>>>>> develop
     </a>
 </p>
 
@@ -69,23 +65,13 @@ clean architecture in his book, that I highly recommend.
 ### Components boundaries
 <p align="center">
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/design-web.png">
-<<<<<<< HEAD
-        <img src="docs/design-web.png" alt="Logo" width="100%" height="100%">
-=======
-        <img src="docs/design-web.png" alt="design" width="100%" height="100%">
->>>>>>> develop
     </a>
 </p>
 
 ### File structure
 <p align="center">
-<<<<<<< HEAD
-    <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/file-structure.png-web.png">
-        <img src="docs/file-structure.png-web.png" alt="Logo" width="100%" height="100%">
-=======
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/file-structure.png">
         <img src="docs/file-structure.png" alt="file structure" width="100%" height="100%">
->>>>>>> develop
     </a>
 </p>
 
