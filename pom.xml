@@ -23,6 +23,7 @@
     </properties>
     <modules>
         <module>useCase</module>
+        <module>data</module>
     </modules>
     <dependencies>
         <!--Spring dependencies -->

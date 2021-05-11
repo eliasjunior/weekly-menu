@@ -9,8 +9,7 @@
         <artifactId>weekly-menu</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-
-    <artifactId>weekly-menu-use-case</artifactId>
+    <artifactId>useCase</artifactId>
     <name>Weekly Menu Use Case</name>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->

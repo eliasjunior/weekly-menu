@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.BaseIntegration;
 import com.weeklyMenu.RecipeFactory;
@@ -57,7 +57,7 @@ public class CartDBAccessDataImplTest {
     @Test(expected = CustomValidationException.class)
     public void test_whenCartDtoPostIsNotValid_throwCustomException() {
         Cart cartDto = new Cart();
-        com.weeklyMenu.webAdaptor.dataAccess.CartAccessDataImpl impl = new com.weeklyMenu.webAdaptor.dataAccess.CartAccessDataImpl(cartRepository);
+        com.weeklyMenu.webAdaptor.data.CartGatewayImpl impl = new com.weeklyMenu.webAdaptor.data.CartGatewayImpl(cartRepository);
         impl.create(cartDto);
     }
 
@@ -177,7 +177,7 @@ public class CartDBAccessDataImplTest {
         assertEquals(1, newCart.getCartItems().size());
 
         Cart cartRequestDTO = MAPPER.cartDBToCart(newCart);
-        cartRequestDTO.setCartItems(cartItemMapper.cartItemsToCartItemDtos(newCart.getCartItems()));
+        cartRequestDTO.setCartItems(cartItemMapper.cartItemsDBToCartItems(newCart.getCartItems()));
 
         // from here is the test the above should had being tested in another test
         cartDataAccess.edit(cartRequestDTO);

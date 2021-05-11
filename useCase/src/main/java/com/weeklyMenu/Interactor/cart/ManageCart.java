@@ -37,9 +37,9 @@ public class ManageCart {
             cart.setId(idGenerator.generateId());
             cart.setCartItems(generateIdProdItem(cart.getCartItems()));
         }
-        cart.getCartItems().forEach(cartItemDto -> {
-            recipeValidator.validateRecipes(cartItemDto.getRecipes());
-            productValidator.validateProduct(cartItemDto.getProdId());
+        cart.getCartItems().forEach(cartItem -> {
+            recipeValidator.validateRecipes(cartItem.getRecipes());
+            productValidator.validateProduct(cartItem.getProdId());
         });
         return this.cartGateway.create(cart);
     }
@@ -49,9 +49,9 @@ public class ManageCart {
 
         cart.setCartItems(generateIdProdItem(cart.getCartItems()));
         cartValidator.validateCartAndProducts(findById(cart.getId()), cart);
-        cart.getCartItems().forEach(cartItemDto -> {
-            recipeValidator.validateRecipes(cartItemDto.getRecipes());
-            productValidator.validateProduct(cartItemDto.getProdId());
+        cart.getCartItems().forEach(cartItem -> {
+            recipeValidator.validateRecipes(cartItem.getRecipes());
+            productValidator.validateProduct(cartItem.getProdId());
         });
         this.cartGateway.edit(cart);
     }
@@ -68,15 +68,15 @@ public class ManageCart {
         return optional.get();
     }
 
-    private List<CartItem> generateIdProdItem(List<CartItem> dtoItems) {
-        if (Objects.isNull(dtoItems)) {
+    private List<CartItem> generateIdProdItem(List<CartItem> Items) {
+        if (Objects.isNull(Items)) {
             throw new CustomValidationException("There is not product item to save the cart");
         }
-        return dtoItems
+        return Items
                 .stream()
-                .peek(cartItemDto -> {
-                    if (Objects.isNull(cartItemDto.getId())) {
-                        cartItemDto.setId(idGenerator.generateId());
+                .peek(cartItem -> {
+                    if (Objects.isNull(cartItem.getId())) {
+                        cartItem.setId(idGenerator.generateId());
                     }
                 })
                 .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.webAdaptor.mapper.RecipeMapper;
 import com.weeklyMenu.webAdaptor.model.RecipeDB;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RecipeAccessDataImpl implements RecipeGateway {
-    final Logger LOGGER = LoggerFactory.getLogger(RecipeAccessDataImpl.class);
+public class RecipeGatewayImpl implements RecipeGateway {
+    final Logger LOGGER = LoggerFactory.getLogger(RecipeGatewayImpl.class);
     private final RecipeRepository recipeRepository;
     private final RecipeMapper MAPPER = RecipeMapper.INSTANCE;
 
-    public RecipeAccessDataImpl(RecipeRepository recipeRepository){
+    public RecipeGatewayImpl(RecipeRepository recipeRepository){
         this.recipeRepository = recipeRepository;
     }
 

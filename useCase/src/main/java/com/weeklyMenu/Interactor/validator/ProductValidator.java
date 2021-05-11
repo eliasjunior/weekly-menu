@@ -35,14 +35,14 @@ public class ProductValidator {
         }
     }
 
-    public void validateProductIn(Product dto) {
-        if(Objects.isNull(dto.getId())) {
-            Product prodInDB = productGateway.findByNameIgnoreCase(dto.getName());
+    public void validateProductIn(Product cart) {
+        if(Objects.isNull(cart.getId())) {
+            Product prodInDB = productGateway.findByNameIgnoreCase(cart.getName());
             if( Objects.nonNull(prodInDB)) {
                 throw new CustomValidationException("Attempt to save new product failed, prod with this name already exists.");
             }
         } else {
-            Product prodExisting = productGateway.findByNameIgnoreCaseAndIdIsDiff(dto.getName(), dto.getId());
+            Product prodExisting = productGateway.findByNameIgnoreCaseAndIdIsDiff(cart.getName(), cart.getId());
             if( Objects.nonNull(prodExisting)) {
                 throw new CustomValidationException("Attempt to save a new product has failed because there is a prod with the same name.");
             }

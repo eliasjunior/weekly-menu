@@ -11,7 +11,7 @@ import java.util.Optional;
 public class CartValidator {
     public void validateCart(Cart cart) {
         try {
-            Objects.requireNonNull(cart.getCartItems(), "List<ProductItems> from CartDto cannot be null");
+            Objects.requireNonNull(cart.getCartItems(), "List<ProductItems> from Cart cannot be null");
             if(cart.getCartItems().size() == 0) {
                 throw new CustomValidationException("Attempt to create a new cart but there is not item");
             }
@@ -33,8 +33,8 @@ public class CartValidator {
 
     public void validateCartAndProducts(Cart oldCart, Cart cart) {
         // validate if cartItem has already the product
-        for (CartItem itemDto : cart.getCartItems()) {
-            if(!containsItem(oldCart.getCartItems(), itemDto.getId()) && containsProdInCart(oldCart.getCartItems(), itemDto.getProdId())) {
+        for (CartItem item : cart.getCartItems()) {
+            if(!containsItem(oldCart.getCartItems(), item.getId()) && containsProdInCart(oldCart.getCartItems(), item.getProdId())) {
                 throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
             }
         }

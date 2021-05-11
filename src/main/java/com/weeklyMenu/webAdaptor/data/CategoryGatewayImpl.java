@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.webAdaptor.model.CategoryDB;
 import main.java.com.weeklyMenu.entity.Category;
@@ -13,18 +13,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryDataAccessImpl implements CategoryGateway {
+public class CategoryGatewayImpl implements CategoryGateway {
     private CategoryRepository categoryRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
 
-    public CategoryDataAccessImpl(CategoryRepository categoryRepository) {
+    public CategoryGatewayImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
     @Override
     public List<Category> getAllCategories() {
-        List<Category> catsDto = MAPPER.categoriesDBToCategories(categoryRepository.findAll());
-        List<Category> withCatProds = catsDto
+        List<Category> cats = MAPPER.categoriesDBToCategories(categoryRepository.findAll());
+        List<Category> withCatProds = cats
                 .stream()
                 .map(cat -> populateCatProds(cat))
                 .collect(Collectors.toList());

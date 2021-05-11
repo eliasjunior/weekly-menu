@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.webAdaptor.mapper.CartItemMapper;
 import com.weeklyMenu.webAdaptor.mapper.CartMapper;
@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CartAccessDataImpl implements CartGateway {
-    final Logger LOGGER = LoggerFactory.getLogger(CartAccessDataImpl.class);
+public class CartGatewayImpl implements CartGateway {
+    final Logger LOGGER = LoggerFactory.getLogger(CartGatewayImpl.class);
     private final CartRepository cartRepository;
     private final CartMapper MAPPER = CartMapper.INSTANCE;
 
     CartItemMapper cartItemMapper = new CartItemMapper();
 
-    public CartAccessDataImpl(CartRepository cartRepository) {
+    public CartGatewayImpl(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
     }
 
@@ -37,10 +37,10 @@ public class CartAccessDataImpl implements CartGateway {
         dbMapper.linkItemsToCart(null);
 
         CartDB cartNew = cartRepository.save(dbMapper);
-        Cart Cart = MAPPER.cartDBToCart(cartNew);
-        Cart.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cartNew.getCartItems()));
+        Cart cartEntity = MAPPER.cartDBToCart(cartNew);
+        cartNew.setCartItems(cartItemMapper.cartItemsToCartItems(cartEntity.getCartItems()));
 
-        return Cart;
+        return cartEntity;
     }
 
     @Override
@@ -63,20 +63,20 @@ public class CartAccessDataImpl implements CartGateway {
 
     @Override
     public List<Cart> getCartList() {
-        List<CartDB> carts = cartRepository.findAllActives();
-        List<Cart> cartsDto = MAPPER.cartsDBToCarts(carts);
+        List<CartDB> cartsDB = cartRepository.findAllActives();
+        List<Cart> carts = MAPPER.cartsDBToCarts(cartsDB);
         for (int i = 0; i < carts.size(); i++) {
-            CartDB cart = carts.get(i);
-            Cart Cart = cartsDto.get(i);
-            Cart.setCartItems(cartItemMapper.cartItemsToCartItemDtos(cart.getCartItems()));
+            CartDB dbMapper = cartsDB.get(i);
+            Cart cart = carts.get(i);
+            dbMapper.setCartItems(cartItemMapper.cartItemsToCartItems(cart.getCartItems()));
         }
-        return cartsDto;
+        return carts;
     }
 
     @Override
     public Optional<Cart> findById(String id) {
         Optional<CartDB> optional = cartRepository.findById(id);
-        if(optional.isEmpty()) {
+        if (optional.isEmpty()) {
             throw new CustomValidationException("Attempt to retrieve cart has failed!");
         }
         return Optional.of(MAPPER.cartDBToCart(optional.get()));

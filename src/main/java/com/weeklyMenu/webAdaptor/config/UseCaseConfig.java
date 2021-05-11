@@ -1,9 +1,9 @@
 package com.weeklyMenu.webAdaptor.config;
 
-import com.weeklyMenu.webAdaptor.dataAccess.CartAccessDataImpl;
-import com.weeklyMenu.webAdaptor.dataAccess.CategoryDataAccessImpl;
-import com.weeklyMenu.webAdaptor.dataAccess.ProductDataAccessImpl;
-import com.weeklyMenu.webAdaptor.dataAccess.RecipeAccessDataImpl;
+import com.weeklyMenu.webAdaptor.data.CartGatewayImpl;
+import com.weeklyMenu.webAdaptor.data.CategoryGatewayImpl;
+import com.weeklyMenu.webAdaptor.data.ProductGatewayImpl;
+import com.weeklyMenu.webAdaptor.data.RecipeGatewayImpl;
 import com.weeklyMenu.webAdaptor.helper.BasicGenerator;
 import com.weeklyMenu.webAdaptor.repository.CartRepository;
 import com.weeklyMenu.webAdaptor.repository.CategoryRepository;
@@ -51,22 +51,22 @@ public class UseCaseConfig {
     }
 
     public CategoryGateway createCategoryGateway() {
-        return new CategoryDataAccessImpl(categoryRepository);
+        return new CategoryGatewayImpl(categoryRepository);
     }
 
     @Bean
     public ProductGateway createProductGateway() {
-        return new ProductDataAccessImpl(productRepository);
+        return new ProductGatewayImpl(productRepository);
     }
 
     @Bean
     public CartGateway createCartGateway() {
-        return new CartAccessDataImpl(cartRepository);
+        return new CartGatewayImpl(cartRepository);
     }
 
     @Bean
     public RecipeGateway createRecipeGateway() {
-        return new RecipeAccessDataImpl(recipeRepository);
+        return new RecipeGatewayImpl(recipeRepository);
     }
 
     @Bean

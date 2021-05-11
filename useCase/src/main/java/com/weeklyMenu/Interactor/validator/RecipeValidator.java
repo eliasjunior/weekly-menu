@@ -64,13 +64,13 @@ public class RecipeValidator {
                         .collect(toList());
 
                 String missingProdsMessage = missingProds.stream()
-                        .map(prodDetailDto -> "Product id not found in the db  " +  prodDetailDto.getProdId())
+                        .map(prodDetail -> "Product id not found in the db  " +  prodDetail.getProdId())
                         .collect(Collectors.joining());
 
                 throw new CustomValidationException(msgError.concat(missingProdsMessage));
             }
         } catch (RuntimeException e) {
-            LOGGER.error("validateRecipeDto ", e);
+            LOGGER.error("validateRecipe ", e);
             throw new CustomValidationException(e.getMessage());
         }
     }
@@ -99,7 +99,7 @@ public class RecipeValidator {
         // ways to check that, but will demand other changes or needs more investigation.
         return recipeItems
                 .stream()
-                .map(prodDetailDto -> productValidator.validateProduct(prodDetailDto.getProdId()))
+                .map(prodDetail -> productValidator.validateProduct(prodDetail.getProdId()))
                 .collect(toList());
     }
 

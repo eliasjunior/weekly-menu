@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.BaseIntegration;
 import com.weeklyMenu.RecipeFactory;

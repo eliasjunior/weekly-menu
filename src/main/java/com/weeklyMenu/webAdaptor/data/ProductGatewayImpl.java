@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.webAdaptor.mapper.InventoryMapper;
 import com.weeklyMenu.webAdaptor.model.ProductDB;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductDataAccessImpl implements ProductGateway {
+public class ProductGatewayImpl implements ProductGateway {
     private final ProductRepository productRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
 
-    public ProductDataAccessImpl(ProductRepository productRepository) {
+    public ProductGatewayImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -25,8 +25,8 @@ public class ProductDataAccessImpl implements ProductGateway {
     }
 
     @Override
-    public Product create(Product dto) {
-        ProductDB dbMapper = MAPPER.productToProductDB(dto);
+    public Product create(Product product) {
+        ProductDB dbMapper = MAPPER.productToProductDB(product);
         dbMapper.updateBasic(null);
         return MAPPER.productDBToProduct(productRepository.save(dbMapper));
     }
@@ -42,8 +42,8 @@ public class ProductDataAccessImpl implements ProductGateway {
     }
 
     @Override
-    public void edit(Product dto) {
-        ProductDB oldProduct = productRepository.findByName(dto.getName());
+    public void edit(Product product) {
+        ProductDB oldProduct = productRepository.findByName(product.getName());
         oldProduct.updateBasic(oldProduct.getBasicEntity());
         productRepository.save(oldProduct);
     }

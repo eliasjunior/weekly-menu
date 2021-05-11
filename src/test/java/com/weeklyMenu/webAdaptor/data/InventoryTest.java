@@ -1,4 +1,4 @@
-package com.weeklyMenu.webAdaptor.dataAccess;
+package com.weeklyMenu.webAdaptor.data;
 
 import com.weeklyMenu.webAdaptor.mapper.InventoryMapper;
 import com.weeklyMenu.webAdaptor.model.CategoryDB;

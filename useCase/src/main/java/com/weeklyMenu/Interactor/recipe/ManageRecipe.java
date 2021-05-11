@@ -46,11 +46,11 @@ public class ManageRecipe {
 
 
     private void generateItemsIds(IdGenerator idGenerator, Recipe recipe) {
-        recipe.getProdsDetail().forEach(prodDetailDto -> {
-            if (isNull(prodDetailDto.getId()) || prodDetailDto.getId().isEmpty()) {
+        recipe.getProdsDetail().forEach(prodDetail -> {
+            if (isNull(prodDetail.getId()) || prodDetail.getId().isEmpty()) {
                 //TODO need a test for regression here
                 //TODO if its update and there is not ID means could have a new prod checked
-                prodDetailDto.setId(idGenerator.generateId());
+                prodDetail.setId(idGenerator.generateId());
             }
         });
     }

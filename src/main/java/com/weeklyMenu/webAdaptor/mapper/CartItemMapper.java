@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CartItemMapper {
-    public List<CartItem> cartItemsToCartItemDtos(List<CartItemDB> cartItemDBS) {
+    public List<CartItem> cartItemsDBToCartItems(List<CartItemDB> cartItemDBS) {
         return cartItemDBS.stream()
                 .map(cartItem -> CartItem.builder()
                         .id(cartItem.getId())
@@ -33,12 +33,12 @@ public class CartItemMapper {
     }
 
     public List<CartItemDB> cartItemsToCartItems(List<CartItem> items) {
-        return items.stream().map(itemDto -> CartItemDB.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .product(ProductDB.builder().id(itemDto.getProdId()).build())
-                .selected(itemDto.isSelected())
-                .selectedRecipes(buildRecipe(itemDto.getRecipes()))
+        return items.stream().map(item -> CartItemDB.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .product(ProductDB.builder().id(item.getProdId()).build())
+                .selected(item.isSelected())
+                .selectedRecipes(buildRecipe(item.getRecipes()))
                 .basicEntity(new BasicEntity())
                 .build()).collect(Collectors.toList());
     }
