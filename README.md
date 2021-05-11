@@ -28,7 +28,7 @@
         <a href="#architecture">Architecture</a>
         <ul>
           <li><a href="#components-boundaries">Components boundaries</a></li>
-          <li><a href="#installation">Installation</a></li>
+          <li><a href="#file-structure">File Structure</a></li>
           <li><a href="#useCases">UseCases</a></li>
           <li><a href="#ds-input-output">Ds Input Output</a></li>
         </ul>
@@ -66,6 +66,13 @@ clean architecture in his book, that I highly recommend.
 <p align="center">
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/design-web.png">
         <img src="docs/design-web.png" alt="Logo" width="100%" height="100%">
+    </a>
+</p>
+
+### File structure
+<p align="center">
+    <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/file-structure.png-web.png">
+        <img src="docs/file-structure.png-web.png" alt="Logo" width="100%" height="100%">
     </a>
 </p>
 

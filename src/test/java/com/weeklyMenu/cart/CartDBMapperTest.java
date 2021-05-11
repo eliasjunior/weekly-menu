@@ -1,10 +1,10 @@
 package com.weeklyMenu.cart;
 
-import com.weeklyMenu.vendor.mapper.CartMapper;
-import com.weeklyMenu.vendor.model.CartItemDB;
-import com.weeklyMenu.vendor.model.ProductDB;
-import com.weeklyMenu.vendor.model.RecipeDB;
-import com.weeklyMenu.vendor.model.CartDB;
+import com.weeklyMenu.webAdaptor.mapper.CartMapper;
+import com.weeklyMenu.webAdaptor.model.CartItemDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.model.RecipeDB;
+import com.weeklyMenu.webAdaptor.model.CartDB;
 import main.java.com.weeklyMenu.entity.Cart;
 import main.java.com.weeklyMenu.entity.CartItem;
 import org.junit.Test;

@@ -1,12 +1,12 @@
 package com.weeklyMenu;
 
-import com.weeklyMenu.vendor.mapper.InventoryMapper;
-import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.CategoryDB;
-import com.weeklyMenu.vendor.model.ProductDB;
-import com.weeklyMenu.vendor.model.RecipeDB;
-import com.weeklyMenu.vendor.repository.ProductRepository;
-import com.weeklyMenu.vendor.repository.RecipeRepository;
+import com.weeklyMenu.webAdaptor.mapper.InventoryMapper;
+import com.weeklyMenu.webAdaptor.mapper.RecipeMapper;
+import com.weeklyMenu.webAdaptor.model.CategoryDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.model.RecipeDB;
+import com.weeklyMenu.webAdaptor.repository.ProductRepository;
+import com.weeklyMenu.webAdaptor.repository.RecipeRepository;
 import main.java.com.weeklyMenu.entity.*;
 import main.java.com.weeklyMenu.gateway.CategoryGateway;
 

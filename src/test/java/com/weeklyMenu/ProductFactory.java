@@ -1,7 +1,7 @@
 package com.weeklyMenu;
 
-import com.weeklyMenu.vendor.model.CategoryDB;
-import com.weeklyMenu.vendor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.model.CategoryDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
 import main.java.com.weeklyMenu.entity.Product;
 
 import java.util.UUID;

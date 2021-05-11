@@ -3,7 +3,7 @@ package com.weeklyMenu.controllers;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.weeklyMenu.helpers.GlobalConstant;
-import com.weeklyMenu.vendor.repository.CategoryRepository;
+import com.weeklyMenu.webAdaptor.repository.CategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

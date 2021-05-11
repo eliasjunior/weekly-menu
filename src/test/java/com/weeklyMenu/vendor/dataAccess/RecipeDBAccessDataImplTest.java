@@ -1,11 +1,11 @@
-package com.weeklyMenu.vendor.dataAccess;
+package com.weeklyMenu.webAdaptor.dataAccess;
 
 import com.weeklyMenu.BaseIntegration;
 import com.weeklyMenu.RecipeFactory;
-import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.RecipeDB;
-import com.weeklyMenu.vendor.repository.ProductRepository;
-import com.weeklyMenu.vendor.repository.RecipeRepository;
+import com.weeklyMenu.webAdaptor.mapper.RecipeMapper;
+import com.weeklyMenu.webAdaptor.model.RecipeDB;
+import com.weeklyMenu.webAdaptor.repository.ProductRepository;
+import com.weeklyMenu.webAdaptor.repository.RecipeRepository;
 import main.java.com.weeklyMenu.entity.Category;
 import main.java.com.weeklyMenu.entity.ProdDetail;
 import main.java.com.weeklyMenu.entity.Product;

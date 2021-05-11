@@ -1,7 +1,7 @@
 package com.weeklyMenu.inventory;
 
 import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.vendor.mapper.InventoryMapper;
+import com.weeklyMenu.webAdaptor.mapper.InventoryMapper;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 

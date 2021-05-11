@@ -1,16 +1,16 @@
-package com.weeklyMenu.vendor.dataAccess;
+package com.weeklyMenu.webAdaptor.dataAccess;
 
 import com.weeklyMenu.BaseIntegration;
 import com.weeklyMenu.RecipeFactory;
-import com.weeklyMenu.vendor.mapper.CartItemMapper;
-import com.weeklyMenu.vendor.mapper.CartMapper;
-import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.CartDB;
-import com.weeklyMenu.vendor.model.CartItemDB;
-import com.weeklyMenu.vendor.repository.CartRepository;
-import com.weeklyMenu.vendor.repository.ProdDetailRepository;
-import com.weeklyMenu.vendor.repository.ProductRepository;
-import com.weeklyMenu.vendor.repository.RecipeRepository;
+import com.weeklyMenu.webAdaptor.mapper.CartItemMapper;
+import com.weeklyMenu.webAdaptor.mapper.CartMapper;
+import com.weeklyMenu.webAdaptor.mapper.RecipeMapper;
+import com.weeklyMenu.webAdaptor.model.CartDB;
+import com.weeklyMenu.webAdaptor.model.CartItemDB;
+import com.weeklyMenu.webAdaptor.repository.CartRepository;
+import com.weeklyMenu.webAdaptor.repository.ProdDetailRepository;
+import com.weeklyMenu.webAdaptor.repository.ProductRepository;
+import com.weeklyMenu.webAdaptor.repository.RecipeRepository;
 import main.java.com.weeklyMenu.entity.*;
 import main.java.com.weeklyMenu.exceptions.CustomValidationException;
 import main.java.com.weeklyMenu.gateway.CartGateway;
@@ -57,7 +57,7 @@ public class CartDBAccessDataImplTest {
     @Test(expected = CustomValidationException.class)
     public void test_whenCartDtoPostIsNotValid_throwCustomException() {
         Cart cartDto = new Cart();
-        CartAccessDataImpl impl = new CartAccessDataImpl(cartRepository);
+        com.weeklyMenu.webAdaptor.dataAccess.CartAccessDataImpl impl = new com.weeklyMenu.webAdaptor.dataAccess.CartAccessDataImpl(cartRepository);
         impl.create(cartDto);
     }
 

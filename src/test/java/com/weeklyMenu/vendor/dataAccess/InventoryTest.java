@@ -1,8 +1,8 @@
-package com.weeklyMenu.vendor.dataAccess;
+package com.weeklyMenu.webAdaptor.dataAccess;
 
-import com.weeklyMenu.vendor.mapper.InventoryMapper;
-import com.weeklyMenu.vendor.model.CategoryDB;
-import com.weeklyMenu.vendor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.mapper.InventoryMapper;
+import com.weeklyMenu.webAdaptor.model.CategoryDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
 import main.java.com.weeklyMenu.entity.Category;
 import main.java.com.weeklyMenu.entity.Product;
 import main.java.com.weeklyMenu.gateway.CategoryGateway;
