@@ -1,14 +1,14 @@
 package com.weeklyMenu;
 
 import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.Product;
+import com.weeklyMenu.vendor.model.CategoryDB;
+import com.weeklyMenu.vendor.model.ProductDB;
 
 import java.util.UUID;
 
 public class ProductFactory {
-    public static Product createProduct(String name, Category category) {
-        Product product = new Product();
+    public static ProductDB createProduct(String name, CategoryDB category) {
+        ProductDB product = new ProductDB();
         product.setName(name);
         product.setCategory(category);
         product.setId(UUID.randomUUID().toString());

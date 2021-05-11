@@ -1,12 +1,12 @@
 package com.weeklyMenu.controllers;
 
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.Product;
+import com.weeklyMenu.vendor.model.CategoryDB;
+import com.weeklyMenu.vendor.model.ProductDB;
 import com.weeklyMenu.vendor.repository.CategoryRepository;
 
 public class TestHelper {
-    public static Product createProduct(Category category) {
-        Product product = new Product();
+    public static ProductDB createProduct(CategoryDB category) {
+        ProductDB product = new ProductDB();
         product.setId("01");
         product.setName("Chuck");
         product.setQuantityType("u");
@@ -14,8 +14,8 @@ public class TestHelper {
         return product;
     }
 
-    public static Category createCategory(CategoryRepository repository) {
-        Category category = new Category();
+    public static CategoryDB createCategory(CategoryRepository repository) {
+        CategoryDB category = new CategoryDB();
         category.setId("cat_01");
         category.setName("Seeds");
         return repository.save(category);

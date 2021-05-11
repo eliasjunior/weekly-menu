@@ -1,12 +1,14 @@
 package com.weeklyMenu.vendor.controller;
 
 
-import com.weeklyMenu.domain.data.CartDataAccess;
-import com.weeklyMenu.dto.CartDto;
+import main.java.com.weeklyMenu.cart.FindCart;
+import main.java.com.weeklyMenu.cart.ManageCart;
+import main.java.com.weeklyMenu.common.GlobalConstant;
+import main.java.com.weeklyMenu.useCase.data.CartDataAccess;
+import com.weeklyMenu.dto.Cart;
 import com.weeklyMenu.helpers.GlobalConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,28 +24,29 @@ import java.util.List;
 @RestController
 @RequestMapping(GlobalConstant.BASE_URL + "/carts")
 public class CartController {
-    final CartDataAccess cartDataAccess;
+    final FindCart findCart;
+    final ManageCart manageCart;
     final Logger LOGGER = LoggerFactory.getLogger(CartController.class);
 
-    @Autowired
-    public CartController(CartDataAccess cartDataAccess) {
-        this.cartDataAccess = cartDataAccess;
+    public CartController(FindCart findCart, ManageCart manageCart) {
+        this.findCart = findCart;
+        this.manageCart = manageCart;
     }
 
     @GetMapping
-    public List<CartDto> getCartList() {
+    public List<Cart> getCartList() {
         LOGGER.info("--> getCartList");
         return cartDataAccess.getCartList();
     }
 
     @PostMapping
-    public CartDto postShoppingList(@RequestBody CartDto dto) {
+    public Cart postShoppingList(@RequestBody Cart dto) {
         LOGGER.info("--> save", dto);
         return cartDataAccess.save(dto);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody CartDto dto) {
+    public ResponseEntity<String> update(@RequestBody Cart dto) {
         LOGGER.info("--> update", dto);
         cartDataAccess.update(dto);
         return ResponseEntity.noContent().build();

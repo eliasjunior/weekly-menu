@@ -1,8 +1,8 @@
 package com.weeklyMenu.vendor.controller;
 
-import com.weeklyMenu.exceptions.CustomValidationException;
+import main.java.com.weeklyMenu.useCase.exceptions.CustomValidationException;
 import com.weeklyMenu.helpers.GlobalConstant;
-import com.weeklyMenu.domain.data.RecipeDataAccess;
+import main.java.com.weeklyMenu.useCase.data.RecipeDataAccess;
 import com.weeklyMenu.dto.RecipeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

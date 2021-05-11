@@ -40,7 +40,7 @@ Content-Type: application/json
 
 {
   "name": "Today",
-  "cartItems": [
+  "cartItemDBS": [
     {
       "id": "1",
       "prodId": "{{prodId}}",

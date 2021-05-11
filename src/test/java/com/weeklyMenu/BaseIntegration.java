@@ -1,7 +1,10 @@
 package com.weeklyMenu;
 
-import com.weeklyMenu.domain.data.CategoryDataAccess;
-import com.weeklyMenu.domain.data.ProductDataAccess;
+import com.weeklyMenu.vendor.model.CategoryDB;
+import com.weeklyMenu.vendor.model.ProductDB;
+import com.weeklyMenu.vendor.model.RecipeDB;
+import main.java.com.weeklyMenu.useCase.data.CategoryDataAccess;
+import main.java.com.weeklyMenu.useCase.data.ProductDataAccess;
 import com.weeklyMenu.dto.CartItemDto;
 import com.weeklyMenu.dto.CategoryDto;
 import com.weeklyMenu.dto.ProdDetailDto;
@@ -9,9 +12,6 @@ import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.dto.RecipeDto;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
 import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.Product;
-import com.weeklyMenu.vendor.model.Recipe;
 import com.weeklyMenu.vendor.repository.ProductRepository;
 import com.weeklyMenu.vendor.repository.RecipeRepository;
 
@@ -44,13 +44,13 @@ public class BaseIntegration {
 
     public ProductDto productFactory(String catId, String name, String id) {
         InventoryMapper MAPPER = InventoryMapper.INSTANCE;
-        Product product = new Product(id, name, "u", new Category(catId, null, null, null), null, null);
+        ProductDB product = new ProductDB(id, name, "u", new CategoryDB(catId, null, null, null), null, null);
         return MAPPER.productToProductDto(productRepository.save(product));
     }
 
     public ProductDto createNewProductGivenCategory(String catId) {
         InventoryMapper MAPPER = InventoryMapper.INSTANCE;
-        Product product = new Product(UUID.randomUUID().toString(), "NoName", "u", new Category(catId, null, null, null), null, null);
+        ProductDB product = new ProductDB(UUID.randomUUID().toString(), "NoName", "u", new CategoryDB(catId, null, null, null), null, null);
         return MAPPER.productToProductDto(productRepository.save(product));
     }
 
@@ -82,11 +82,11 @@ public class BaseIntegration {
     }
 
     public RecipeDto createRecipeDto(List<ProdDetailDto> recipeItems, String recipeName) {
-        Recipe recipe = new Recipe();
+        RecipeDB recipe = new RecipeDB();
         recipe.setName(recipeName);
         recipe.setId(UUID.randomUUID().toString());
         recipe.setProdsDetail(RECIPE_MAPPER.recipeItemsDtosToRecipeItems(recipeItems));
-        Recipe newRecipe = recipeRepository.save(recipe);
+        RecipeDB newRecipe = recipeRepository.save(recipe);
         RecipeDto  recipeDto = RECIPE_MAPPER.recipeToRecipeDto(newRecipe);
         recipeDto.setProdsDetail(RECIPE_MAPPER.recipeItemsToRecipeItemsDtos(newRecipe.getProdsDetail()));
         return recipeDto;

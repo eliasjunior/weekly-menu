@@ -1,9 +1,10 @@
 package com.weeklyMenu.vendor.controller;
 
-import com.weeklyMenu.dto.CategoryDto;
-import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.helpers.GlobalConstant;
-import com.weeklyMenu.domain.data.CategoryDataAccess;
+import com.weeklyMenu.vendor.controller.model.CategoryWeb;
+import main.java.com.weeklyMenu.Interactor.category.FindCategory;
+import main.java.com.weeklyMenu.Interactor.category.ManageCategory;
+import main.java.com.weeklyMenu.common.GlobalConstant;
+import main.java.com.weeklyMenu.entity.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,43 +19,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(GlobalConstant.BASE_URL + "/categories")
 public class CategoryController {
-    final CategoryDataAccess categoryDataAccess;
+    final FindCategory findCategory;
+    final ManageCategory manageCategory;
     final Logger LOGGER;
 
     @Autowired
-    CategoryController(CategoryDataAccess categoryDataAccess) {
+    CategoryController(FindCategory findCategory, ManageCategory manageCategory) {
+        this.manageCategory = manageCategory;
         LOGGER = LoggerFactory.getLogger(CategoryController.class);
-        this.categoryDataAccess = categoryDataAccess;
+        this.findCategory = findCategory;
     }
 
     @GetMapping
-    public List<CategoryDto> getCategories() {
+    public List<CategoryWeb> getCategories() {
         LOGGER.info("--> getCategories");
-        return categoryDataAccess.getAllCategories();
+        return findCategory
+                .getAllCategories().stream()
+                   .map(CategoryWeb::toCategoryWeb)
+                   .collect(Collectors.toList());
     }
     @GetMapping("/{id}")
-    public CategoryDto getCategory(@PathVariable String id) {
+    public CategoryWeb getCategory(@PathVariable String id) {
         LOGGER.info("--> getCategory {}", id);
-        return categoryDataAccess.getCategory(id);
+        return CategoryWeb.toCategoryWeb(findCategory.getCategory(id));
     }
     @PostMapping
-    public CategoryDto create(@RequestBody CategoryDto dto) {
+    public CategoryWeb create(@RequestBody CategoryWeb categoryWeb) {
         LOGGER.info("--> save");
-        return categoryDataAccess.save(dto);
+        Category category = manageCategory.create(categoryWeb.toCategory());
+        return CategoryWeb.toCategoryWeb(category);
     }
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody CategoryDto dto) {
+    public ResponseEntity<String> update(@RequestBody CategoryWeb categoryWeb) {
         LOGGER.info("--> update");
-        categoryDataAccess.update(dto);
+        manageCategory.edit(categoryWeb.toCategory());
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping
     public ResponseEntity<String> delete(@PathVariable String id) {
-        categoryDataAccess.delete(id);
+        manageCategory.remove(id);
         return ResponseEntity.noContent().build();
     }
 }

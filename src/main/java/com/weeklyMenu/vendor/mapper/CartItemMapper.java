@@ -1,10 +1,10 @@
 package com.weeklyMenu.vendor.mapper;
 
-import com.weeklyMenu.dto.CartItemDto;
 import com.weeklyMenu.vendor.model.BasicEntity;
-import com.weeklyMenu.vendor.model.CartItem;
-import com.weeklyMenu.vendor.model.Product;
-import com.weeklyMenu.vendor.model.Recipe;
+import com.weeklyMenu.vendor.model.CartItemDB;
+import com.weeklyMenu.vendor.model.ProductDB;
+import com.weeklyMenu.vendor.model.RecipeDB;
+import main.java.com.weeklyMenu.entity.CartItem;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,9 +12,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CartItemMapper {
-    public List<CartItemDto> cartItemsToCartItemDtos(List<CartItem> cartItems) {
-        return cartItems.stream()
-                .map(cartItem -> CartItemDto.builder()
+    public List<CartItem> cartItemsToCartItemDtos(List<CartItemDB> cartItemDBS) {
+        return cartItemDBS.stream()
+                .map(cartItem -> CartItem.builder()
                         .id(cartItem.getId())
                         .name(cartItem.getName())
                         .prodId(cartItem.getProduct().getId())
@@ -23,32 +23,32 @@ public class CartItemMapper {
                 .collect(Collectors.toList());
     }
 
-    private Set<String> grabRecipeIds(Set<Recipe> selectedRecipes) {
+    private Set<String> grabRecipeIds(Set<RecipeDB> selectedRecipes) {
         if (Objects.isNull(selectedRecipes)) {
             return null;
         }
         return selectedRecipes.stream()
-                .map(Recipe::getId)
+                .map(RecipeDB::getId)
                 .collect(Collectors.toSet());
     }
 
-    public List<CartItem> cartItemDtosToCartItems(List<CartItemDto> itemDtos) {
-        return itemDtos.stream().map(itemDto -> CartItem.builder()
+    public List<CartItemDB> cartItemsToCartItems(List<CartItem> items) {
+        return items.stream().map(itemDto -> CartItemDB.builder()
                 .id(itemDto.getId())
                 .name(itemDto.getName())
-                .product(Product.builder().id(itemDto.getProdId()).build())
+                .product(ProductDB.builder().id(itemDto.getProdId()).build())
                 .selected(itemDto.isSelected())
                 .selectedRecipes(buildRecipe(itemDto.getRecipes()))
                 .basicEntity(new BasicEntity())
                 .build()).collect(Collectors.toList());
     }
 
-    private Set<Recipe> buildRecipe(Set<String> recipeIds) {
+    private Set<RecipeDB> buildRecipe(Set<String> recipeIds) {
         if (Objects.isNull(recipeIds)) {
             return null;
         }
         return recipeIds.stream()
-                .map(id -> Recipe.builder().id(id).build())
+                .map(id -> RecipeDB.builder().id(id).build())
                 .collect(Collectors.toSet());
     }
 }

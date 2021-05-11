@@ -1,37 +1,30 @@
 package com.weeklyMenu.vendor.dataAccess;
 
-import com.weeklyMenu.dto.CategoryDto;
-import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.exceptions.CustomValidationException;
-import com.weeklyMenu.domain.data.CategoryDataAccess;
+import com.weeklyMenu.vendor.model.CategoryDB;
+import main.java.com.weeklyMenu.entity.Category;
+import main.java.com.weeklyMenu.exceptions.CustomValidationException;
+import main.java.com.weeklyMenu.gateway.CategoryGateway;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
-import com.weeklyMenu.vendor.helper.IdGenerator;
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.Product;
 import com.weeklyMenu.vendor.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryDataAccessImpl implements CategoryDataAccess {
+public class CategoryDataAccessImpl implements CategoryGateway {
     private CategoryRepository categoryRepository;
     private final InventoryMapper MAPPER = InventoryMapper.INSTANCE;
-    private IdGenerator idGenerator;
 
-    public CategoryDataAccessImpl(CategoryRepository categoryRepository, IdGenerator idGenerator) {
+    public CategoryDataAccessImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.idGenerator = idGenerator;
     }
 
     @Override
-    public List<CategoryDto> getAllCategories() {
-        List<CategoryDto> catsDto = MAPPER.categoryToCategoryDto(categoryRepository.findAll());
-        List<CategoryDto> withCatProds = catsDto
+    public List<Category> getAllCategories() {
+        List<Category> catsDto = MAPPER.categoriesDBToCategories(categoryRepository.findAll());
+        List<Category> withCatProds = catsDto
                 .stream()
                 .map(cat -> populateCatProds(cat))
                 .collect(Collectors.toList());
@@ -39,53 +32,49 @@ public class CategoryDataAccessImpl implements CategoryDataAccess {
     }
 
     @Override
-    public CategoryDto save(CategoryDto categoryDTO) {
-        if (categoryDTO.getId() == null) {
-            categoryDTO.setId(idGenerator.generateId());
-        }
-
-        if (categoryDTO.getProdIds() != null && categoryDTO.getProdIds().size() > 0) {
-            categoryDTO.setProducts(categoryDTO.getProdIds()
-                    .stream()
-                    .map(prodId -> new ProductDto(prodId))
-                    .collect(Collectors.toList()));
-        }
-        validateInDB(categoryDTO);
-        Category category = MAPPER.categoryDtoToCategory(categoryDTO);
-        category.updateBasic(null);
-        return MAPPER.categoryToCategoryDto(categoryRepository.save(category));
+    public Category create(Category category) {
+        CategoryDB dbMapper = MAPPER.categoryToCategoryDB(category);
+        dbMapper.updateBasic(null);
+        return MAPPER.categoryDBToCategory(categoryRepository.save(dbMapper));
     }
 
     @Override
-    public void update(CategoryDto dto) {
-        Optional<Category> optional = categoryRepository.findById(dto.getId());
-        if (!optional.isPresent()) {
-            throw new CustomValidationException("Category not found to update", new RuntimeException());
-        }
-        validateInDB(dto);
-        Category category = MAPPER.categoryDtoToCategory(dto);
-        Optional<Category> optCat = categoryRepository.findById(category.getId());
-        Category inBdCategory = optCat.get();
-        if(Objects.isNull(optCat.get())) {
-            throw new CustomValidationException("Update failed because the category id sent by the request was not found!");
-        }
-        category.setBasicEntity(inBdCategory.getBasicEntity());
-        category.updateBasic(inBdCategory.getBasicEntity());
-        categoryRepository.save(category);
+    public void edit(Category category) {
+        CategoryDB dbMapper = MAPPER.categoryToCategoryDB(category);
+        CategoryDB oldCat = categoryRepository.findByName(dbMapper.getName());
+        dbMapper.setBasicEntity(oldCat.getBasicEntity());
+        dbMapper.updateBasic(oldCat.getBasicEntity());
+        categoryRepository.save(dbMapper);
     }
 
     @Override
-    public void delete(String id) {
+    public void remove(String id) {
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public CategoryDto getCategory(String id) {
+    public Category getCategory(String id) {
         return MAPPER
-                .categoryToCategoryDto(categoryRepository.findById(id).get());
+                .categoryDBToCategory(categoryRepository.findById(id).get());
     }
 
-    private CategoryDto populateCatProds(CategoryDto cat) {
+    @Override
+    public Category findByNameIgnoreCase(String name) {
+        return MAPPER.categoryDBToCategory(categoryRepository.findByNameIgnoreCase(name));
+    }
+
+    @Override
+    public Category findByNameIgnoreCaseAndIdIsDiff(String name, String id) {
+        return MAPPER.categoryDBToCategory(categoryRepository.findByNameIgnoreCaseAndIdIsDiff(name, id));
+    }
+
+    @Override
+    public Optional<Category> findById(String id) {
+        Optional<CategoryDB> optional = categoryRepository.findById(id);
+        return Optional.of(MAPPER.categoryDBToCategory(optional.get())) ;
+    }
+
+    private Category populateCatProds(Category cat) {
         try {
             List<String> catProds = cat.getProducts()
                     .stream()
@@ -95,20 +84,6 @@ public class CategoryDataAccessImpl implements CategoryDataAccess {
             return cat;
         } catch (Exception e) {
             throw new CustomValidationException("Something went wrong while populating prod ids", e);
-        }
-    }
-
-    private void validateInDB(CategoryDto dto) {
-        if(Objects.isNull(dto.getId())) {
-            Category catInDb = categoryRepository.findByNameIgnoreCase(dto.getName());
-            if( Objects.nonNull(catInDb)) {
-                throw new CustomValidationException("Attempt to save new category failed, cat with this name already exists.");
-            }
-        } else {
-            Category catExisting = categoryRepository.findByNameIgnoreCaseAndIdIsDiff(dto.getName(), dto.getId());
-            if( Objects.nonNull(catExisting)) {
-                throw new CustomValidationException("Attempt to save a new category has failed because there is a cat with the same name.");
-            }
         }
     }
 }

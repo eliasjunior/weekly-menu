@@ -1,7 +1,7 @@
 package com.weeklyMenu.vendor.mapper;
 
-import com.weeklyMenu.dto.CartDto;
-import com.weeklyMenu.vendor.model.Cart;
+import com.weeklyMenu.vendor.model.CartDB;
+import main.java.com.weeklyMenu.entity.Cart;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -11,9 +11,9 @@ import java.util.List;
 public interface CartMapper {
     CartMapper INSTANCE = Mappers.getMapper(CartMapper.class);
 
-    CartDto cartToDto(Cart cart);
+    Cart cartDBToCart(CartDB cart);
 
-    List<CartDto> cartsToCartDtos(List<Cart> carts);
+    List<Cart> cartsDBToCarts(List<CartDB> carts);
 
-    Cart dtoToCart(CartDto dto);
+    CartDB cartToCartDB(Cart dto);
 }

@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "name": "Today",
-  "cartItems": [
+  "cartItemDBS": [
     {
       "name" : "Flour",
       "id": "1",
@@ -38,7 +38,7 @@ Content-Type: application/json
 {
   "id":  "{{cartId}}",
   "name": "Yesterday",
-  "cartItems": [
+  "cartItemDBS": [
     {
       "id": "bc1fb4c8-0c32-44e0-b164-4872d7ce0ff3",
       "prodId": "001_p",

@@ -1,9 +1,9 @@
 package com.weeklyMenu.vendor.mapper;
 
-import com.weeklyMenu.dto.CategoryDto;
-import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.vendor.model.Category;
-import com.weeklyMenu.vendor.model.Product;
+import com.weeklyMenu.vendor.model.CategoryDB;
+import com.weeklyMenu.vendor.model.ProductDB;
+import main.java.com.weeklyMenu.entity.Category;
+import main.java.com.weeklyMenu.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,16 +15,16 @@ public interface InventoryMapper {
     InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
 
     @Mapping(source = "catId", target = "category.id")
-    Product productDtoToProduct(ProductDto dto);
+    ProductDB productToProductDB(Product product);
 
     @Mapping(source = "category.id", target = "catId")
-    ProductDto productToProductDto(Product entity);
+    Product productDBToProduct(ProductDB entity);
 
-    List<ProductDto> listProductDtoToProduct(List<Product> products);
+    List<Product> listProductsDBToProducts(List<ProductDB> products);
 
-    CategoryDto categoryToCategoryDto(Category entity);
+    Category categoryDBToCategory(CategoryDB entity);
 
-    Category categoryDtoToCategory(CategoryDto dto);
+    CategoryDB categoryToCategoryDB(Category category);
 
-    List<CategoryDto> categoryToCategoryDto(List<Category> categories);
+    List<Category> categoriesDBToCategories(List<CategoryDB> categories);
 }
