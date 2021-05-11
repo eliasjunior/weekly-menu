@@ -65,6 +65,7 @@ clean architecture in his book, that I highly recommend.
 ### Components boundaries
 <p align="center">
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/design-web.png">
+        <img src="docs/design-web.png" alt="design" width="100%" height="100%">
     </a>
 </p>
 
