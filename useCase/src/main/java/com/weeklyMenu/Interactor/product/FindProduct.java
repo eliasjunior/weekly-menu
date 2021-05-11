@@ -15,4 +15,13 @@ public class FindProduct {
     public List<Product> getAllProducts() {
         return productGateway.getAllProducts();
     }
+
+    public Product getProduct(String id) {
+        return productGateway.getProduct(id);
+    }
+
+    public boolean isProductNameUsed(Product dto) {
+        Product product = productGateway.findByName(dto.getName());
+        return product != null;
+    }
 }

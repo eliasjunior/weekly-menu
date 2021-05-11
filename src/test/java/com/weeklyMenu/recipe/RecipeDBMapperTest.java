@@ -2,10 +2,10 @@ package com.weeklyMenu.recipe;
 
 import com.weeklyMenu.dto.ProdDetailDto;
 import com.weeklyMenu.dto.RecipeDto;
-import com.weeklyMenu.vendor.mapper.RecipeMapper;
-import com.weeklyMenu.vendor.model.ProdDetailDB;
-import com.weeklyMenu.vendor.model.ProductDB;
-import com.weeklyMenu.vendor.model.RecipeDB;
+import com.weeklyMenu.webAdaptor.mapper.RecipeMapper;
+import com.weeklyMenu.webAdaptor.model.ProdDetailDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.model.RecipeDB;
 import org.junit.Test;
 
 import java.util.ArrayList;

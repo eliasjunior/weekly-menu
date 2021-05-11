@@ -2,10 +2,10 @@ package com.weeklyMenu.controllers;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
-import com.weeklyMenu.helpers.GlobalConstant;
-import com.weeklyMenu.vendor.model.ProductDB;
-import com.weeklyMenu.vendor.repository.CategoryRepository;
-import com.weeklyMenu.vendor.repository.ProductRepository;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.repository.CategoryRepository;
+import com.weeklyMenu.webAdaptor.repository.ProductRepository;
+import main.java.com.weeklyMenu.common.GlobalConstant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

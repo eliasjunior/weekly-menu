@@ -1,8 +1,8 @@
 package com.weeklyMenu.controllers;
 
-import com.weeklyMenu.vendor.model.CategoryDB;
-import com.weeklyMenu.vendor.model.ProductDB;
-import com.weeklyMenu.vendor.repository.CategoryRepository;
+import com.weeklyMenu.webAdaptor.model.CategoryDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.repository.CategoryRepository;
 
 public class TestHelper {
     public static ProductDB createProduct(CategoryDB category) {

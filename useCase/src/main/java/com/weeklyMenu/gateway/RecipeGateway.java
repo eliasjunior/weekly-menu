@@ -13,4 +13,5 @@ public interface RecipeGateway {
     void remove(String id);
     Recipe findByNameIgnoreCase(String name);
     Recipe findByNameIgnoreCaseAndIdIsDiff(String name, String id);
+    Recipe findByName(String name);
 }

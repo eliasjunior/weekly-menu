@@ -1,8 +1,8 @@
 package com.weeklyMenu;
 
-import com.weeklyMenu.dto.ProductDto;
-import com.weeklyMenu.vendor.model.CategoryDB;
-import com.weeklyMenu.vendor.model.ProductDB;
+import com.weeklyMenu.webAdaptor.model.CategoryDB;
+import com.weeklyMenu.webAdaptor.model.ProductDB;
+import main.java.com.weeklyMenu.entity.Product;
 
 import java.util.UUID;
 
@@ -15,8 +15,8 @@ public class ProductFactory {
         return product;
     }
 
-    public static ProductDto createProductDto(String name,String catId) {
-        ProductDto product = new ProductDto();
+    public static Product createProductDto(String name, String catId) {
+        Product product = new Product();
         product.setName(name);
         product.setCatId(catId);
         product.setId(UUID.randomUUID().toString());
