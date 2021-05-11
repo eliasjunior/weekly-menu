@@ -21,9 +21,14 @@ public class FindRecipe {
 
     public Recipe getRecipe(String id) {
         Optional<Recipe> optional = recipeGateway.findById(id);
-        if(!optional.isPresent()) {
+        if(optional.isEmpty()) {
             throw new CustomValidationException("Attempt to load recipe has failed");
         }
         return optional.get();
+    }
+
+    public boolean isRecipeNameUsed(Recipe dto) {
+        Recipe recipe = recipeGateway.findByName(dto.getName());
+        return recipe != null;
     }
 }

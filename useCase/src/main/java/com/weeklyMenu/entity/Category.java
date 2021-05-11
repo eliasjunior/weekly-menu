@@ -8,12 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class Category {
-    public Category() {
-    }
-    public Category(String id) {
-        this.id = id;
-    }
-
     private String id;
     private String name;
     private List<Product> products;

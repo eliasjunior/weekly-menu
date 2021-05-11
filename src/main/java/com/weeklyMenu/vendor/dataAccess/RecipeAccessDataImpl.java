@@ -50,6 +50,11 @@ public class RecipeAccessDataImpl implements RecipeGateway {
     }
 
     @Override
+    public Recipe findByName(String name) {
+        return MAPPER.recipeDBToRecipe(recipeRepository.findByName(name));
+    }
+
+    @Override
     public Recipe create(Recipe recipe) {
         LOGGER.debug("save" + recipe.toString());
         RecipeDB newRecipe = MAPPER.recipeToRecipeDB(recipe);

@@ -1,20 +1,14 @@
 package com.weeklyMenu.vendor.controller;
 
-import main.java.com.weeklyMenu.useCase.exceptions.CustomValidationException;
-import com.weeklyMenu.helpers.GlobalConstant;
-import main.java.com.weeklyMenu.useCase.data.RecipeDataAccess;
-import com.weeklyMenu.dto.RecipeDto;
+import main.java.com.weeklyMenu.Interactor.recipe.FindRecipe;
+import main.java.com.weeklyMenu.Interactor.recipe.ManageRecipe;
+import main.java.com.weeklyMenu.common.GlobalConstant;
+import main.java.com.weeklyMenu.entity.Recipe;
+import main.java.com.weeklyMenu.exceptions.CustomValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -22,31 +16,33 @@ import java.util.List;
 @RestController
 @RequestMapping(GlobalConstant.BASE_URL + "/recipes")
 public class RecipeController {
-    final RecipeDataAccess recipeDataAccess;
+    final FindRecipe findRecipe;
+    final ManageRecipe manageRecipe;
     final Logger LOGGER = LoggerFactory.getLogger(RecipeController.class);
 
-    public RecipeController(RecipeDataAccess recipeDataAccess) {
-        this.recipeDataAccess = recipeDataAccess;
+    public RecipeController(FindRecipe findRecipe, ManageRecipe manageRecipe) {
+        this.findRecipe = findRecipe;
+        this.manageRecipe = manageRecipe;
     }
 
     @GetMapping
-    public List<RecipeDto> getRecipes() {
+    public List<Recipe> getRecipes() {
         LOGGER.info("--> getRecipes");
-        return recipeDataAccess.getAllRecipes();
+        return findRecipe.getAllRecipes();
     }
 
     @GetMapping("/{id}")
-    public RecipeDto getRecipe(@PathVariable String id) {
+    public Recipe getRecipe(@PathVariable String id) {
         LOGGER.info("--> getRecipe {}", id);
-        return recipeDataAccess.getRecipe(id);
+        return findRecipe.getRecipe(id);
     }
 
     @PostMapping
-    public  ResponseEntity<RecipeDto> create(@RequestBody RecipeDto productDto) {
+    public  ResponseEntity<Recipe> create(@RequestBody Recipe productDto) {
         LOGGER.info("--> save");
-        boolean isCreated = recipeDataAccess.isRecipeNameUsed(productDto);
+        boolean isCreated = findRecipe.isRecipeNameUsed(productDto);
         if (!isCreated) {
-            RecipeDto recipeDto = recipeDataAccess.save(productDto);
+            Recipe recipeDto = manageRecipe.create(productDto);
             return ResponseEntity
                     .created(URI.create(String.format(GlobalConstant.BASE_URL + "/recipes/%s", recipeDto.getId())))
                     .body(recipeDto);
@@ -56,15 +52,15 @@ public class RecipeController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody RecipeDto dto) {
+    public ResponseEntity<String> update(@RequestBody Recipe dto) {
         LOGGER.info("--> update");
-        recipeDataAccess.update(dto);
+        manageRecipe.edit(dto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> delete(@PathVariable String id) {
-        recipeDataAccess.delete(id);
+        manageRecipe.remove(id);
         return ResponseEntity.noContent().build();
     }
 }

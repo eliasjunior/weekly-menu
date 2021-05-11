@@ -48,7 +48,7 @@ public class ManageCart {
 
         cart.setCartItems(generateIdProdItem(cart.getCartItems()));
         Optional<Cart> optional = cartGateway.findById(cart.getId());
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new CustomValidationException("Update failed because the cart id sent by the request was not found!");
         }
         Cart oldCart = optional.get();
@@ -58,15 +58,23 @@ public class ManageCart {
                 throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
             }
         }
-
         cart.getCartItems().forEach(cartItemDto ->  {
             recipeValidator.validateRecipes(cartItemDto.getRecipes());
             productValidator.validateProduct(cartItemDto.getProdId());
         });
         this.cartGateway.edit(cart);
     }
-    public void edit(String id) {
-        this.cartGateway.remove(id);
+
+    public void remove(String id) {
+        cartGateway.remove(id);
+    }
+
+    public Cart findById(String id) {
+        Optional<Cart> optional = cartGateway.findById(id);
+        if(optional.isEmpty()) {
+            throw new CustomValidationException("Attempt to retrieve cart has failed!");
+        }
+        return optional.get();
     }
 
     private List<CartItem> generateIdProdItem(List<CartItem> dtoItems) {
@@ -94,4 +102,5 @@ public class ManageCart {
                 .stream()
                 .anyMatch(cartItem -> cartItem.getProduct().getId().equals(prodId));
     }
+
 }

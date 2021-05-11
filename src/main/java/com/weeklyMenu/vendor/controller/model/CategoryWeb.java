@@ -23,13 +23,9 @@ public class CategoryWeb {
     }
 
     public static CategoryWeb toCategoryWeb(Category category) {
-        return null;
-//        var catWeb = new CategoryWeb();
-//        catWeb.set(user.getId());
-//        userWeb.setEmail(user.getEmail());
-//        // do not map password
-//        userWeb.setLastName(user.getLastName());
-//        userWeb.setFirstName(user.getFirstName());
-//        return userWeb;
+        var catWeb = new CategoryWeb();
+        catWeb.setId(category.getId());
+        catWeb.setName(category.getName());
+        return catWeb;
     }
 }

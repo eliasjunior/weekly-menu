@@ -4,9 +4,8 @@ import com.weeklyMenu.vendor.mapper.CartItemMapper;
 import com.weeklyMenu.vendor.mapper.CartMapper;
 import com.weeklyMenu.vendor.model.CartDB;
 import com.weeklyMenu.vendor.repository.CartRepository;
-import com.weeklyMenu.vendor.repository.ProductRepository;
-import com.weeklyMenu.vendor.repository.RecipeRepository;
 import main.java.com.weeklyMenu.entity.Cart;
+import main.java.com.weeklyMenu.exceptions.CustomValidationException;
 import main.java.com.weeklyMenu.gateway.CartGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +47,7 @@ public class CartAccessDataImpl implements CartGateway {
     public void edit(Cart cart) {
         LOGGER.debug("--- update --- " + cart.toString());
 
-        CartDB dbMapper = cartRepository.findById(cart.getId()).get();
-
-        dbMapper.setCartItems(cartItemMapper.cartItemsToCartItems(cart.getCartItems()));
+        CartDB dbMapper = MAPPER.cartToCartDB(cart);
 
         //TODO review these links
         dbMapper.linkItemsToCart(dbMapper.getBasicEntity(), dbMapper.getCartItems());
@@ -79,6 +76,9 @@ public class CartAccessDataImpl implements CartGateway {
     @Override
     public Optional<Cart> findById(String id) {
         Optional<CartDB> optional = cartRepository.findById(id);
+        if(optional.isEmpty()) {
+            throw new CustomValidationException("Attempt to retrieve cart has failed!");
+        }
         return Optional.of(MAPPER.cartDBToCart(optional.get()));
     }
 }

@@ -1,6 +1,7 @@
 package com.weeklyMenu.vendor.config;
 
 import com.weeklyMenu.vendor.repository.CartRepository;
+import com.weeklyMenu.vendor.repository.CategoryRepository;
 import com.weeklyMenu.vendor.repository.ProductRepository;
 import com.weeklyMenu.vendor.repository.RecipeRepository;
 import main.java.com.weeklyMenu.Interactor.cart.FindCart;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class CartUseCaseConfig extends UseCaseConfig {
     public CartUseCaseConfig(ProductRepository productRepository,
                              CartRepository cartRepository, RecipeRepository recipeRepository,
-                             ProductValidator productValidator, IdGenerator idGenerator) {
-        super(productRepository, cartRepository, recipeRepository, productValidator, idGenerator);
+                             ProductValidator productValidator, IdGenerator idGenerator, CategoryRepository categoryRepository) {
+        super(productRepository, cartRepository, recipeRepository, productValidator, idGenerator, categoryRepository);
     }
 
     @Bean

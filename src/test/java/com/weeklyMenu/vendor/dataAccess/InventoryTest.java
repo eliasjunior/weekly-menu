@@ -1,13 +1,12 @@
 package com.weeklyMenu.vendor.dataAccess;
 
-import com.weeklyMenu.vendor.model.CategoryDB;
-import main.java.com.weeklyMenu.useCase.data.CategoryDataAccess;
-import main.java.com.weeklyMenu.useCase.data.ProductDataAccess;
-import main.java.com.weeklyMenu.useCase.data.RecipeDataAccess;
-import com.weeklyMenu.dto.CategoryDto;
-import com.weeklyMenu.dto.ProductDto;
 import com.weeklyMenu.vendor.mapper.InventoryMapper;
+import com.weeklyMenu.vendor.model.CategoryDB;
 import com.weeklyMenu.vendor.model.ProductDB;
+import main.java.com.weeklyMenu.entity.Category;
+import main.java.com.weeklyMenu.entity.Product;
+import main.java.com.weeklyMenu.gateway.CategoryGateway;
+import main.java.com.weeklyMenu.gateway.RecipeGateway;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +19,23 @@ import java.util.UUID;
 @SpringBootTest
 public class InventoryTest {
     @Autowired
-    CategoryDataAccess categoryDataAccess;
+    CategoryGateway categoryDataAccess;
     @Autowired
-    RecipeDataAccess recipeAccessData;
+    RecipeGateway recipeAccessData;
 
     @Test
     public void testMapperDtoToEntity() {
         InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
-        CategoryDto categoryDTO = new CategoryDto();
+        Category categoryDTO = Category.builder().build();
         categoryDTO.setId(UUID.randomUUID().toString());
 
-        System.out.println(inventoryMapper.categoryDtoToCategory(categoryDTO));
+        System.out.println(inventoryMapper.categoryToCategoryDB(categoryDTO));
 
-        ProductDto productDTO = new ProductDto();
+        Product productDTO = new Product();
         productDTO.setName("Sugar");
         productDTO.setCatId(categoryDTO.getId());
         System.out.println("&&&&& --> #################");
-        System.out.println(inventoryMapper.productDtoToProduct(productDTO));
+        System.out.println(inventoryMapper.productToProductDB(productDTO));
     }
 
     @Test
@@ -52,6 +51,6 @@ public class InventoryTest {
         product.setCategory(category);
 
         System.out.println("&&&&& --> #################");
-        System.out.println(inventoryMapper.productToProductDto(product));
+        System.out.println(inventoryMapper.productDBToProduct(product));
     }
 }

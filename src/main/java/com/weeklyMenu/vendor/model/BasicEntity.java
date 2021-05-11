@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import static com.weeklyMenu.helpers.GlobalConstant.STATUS_ACTIVE;
+import static main.java.com.weeklyMenu.common.GlobalConstant.STATUS_ACTIVE;
 
 @Embeddable
 @Data
