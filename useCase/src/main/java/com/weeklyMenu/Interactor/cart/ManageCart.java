@@ -37,28 +37,19 @@ public class ManageCart {
             cart.setId(idGenerator.generateId());
             cart.setCartItems(generateIdProdItem(cart.getCartItems()));
         }
-        cart.getCartItems().forEach(cartItemDto ->  {
+        cart.getCartItems().forEach(cartItemDto -> {
             recipeValidator.validateRecipes(cartItemDto.getRecipes());
             productValidator.validateProduct(cartItemDto.getProdId());
         });
         return this.cartGateway.create(cart);
     }
+
     public void edit(Cart cart) {
         cartValidator.validateCart(cart);
 
         cart.setCartItems(generateIdProdItem(cart.getCartItems()));
-        Optional<Cart> optional = cartGateway.findById(cart.getId());
-        if (optional.isEmpty()) {
-            throw new CustomValidationException("Update failed because the cart id sent by the request was not found!");
-        }
-        Cart oldCart = optional.get();
-        // validate if cartItem has already the product
-        for (CartItem itemDto : cart.getCartItems()) {
-            if(!containsItem(oldCart.getCartItems(), itemDto.getId()) && containsProdInCart(oldCart.getCartItems(), itemDto.getProdId())) {
-                throw new CustomValidationException("Attempt to update the cart has failed because the cart already has a product! and cart item is new");
-            }
-        }
-        cart.getCartItems().forEach(cartItemDto ->  {
+        cartValidator.validateCartAndProducts(findById(cart.getId()), cart);
+        cart.getCartItems().forEach(cartItemDto -> {
             recipeValidator.validateRecipes(cartItemDto.getRecipes());
             productValidator.validateProduct(cartItemDto.getProdId());
         });
@@ -71,7 +62,7 @@ public class ManageCart {
 
     public Cart findById(String id) {
         Optional<Cart> optional = cartGateway.findById(id);
-        if(optional.isEmpty()) {
+        if (optional.isEmpty()) {
             throw new CustomValidationException("Attempt to retrieve cart has failed!");
         }
         return optional.get();
@@ -90,17 +81,4 @@ public class ManageCart {
                 })
                 .collect(Collectors.toList());
     }
-
-    private boolean containsItem(final List<CartItem> list, final String id){
-        return list
-                .stream()
-                .anyMatch(cartItem -> cartItem.getId().equals(id));
-    }
-
-    private boolean containsProdInCart(final List<CartItem> list, final String prodId){
-        return list
-                .stream()
-                .anyMatch(cartItem -> cartItem.getProduct().getId().equals(prodId));
-    }
-
 }
