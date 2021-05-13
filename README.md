@@ -72,7 +72,7 @@ clean architecture in his book, that I highly recommend.
 ### File structure
 <p align="center">
     <a href="https://github.com/eliasjunior/home-video-docs/blob/main/docs/file-structure.png">
-        <img src="docs/file-structure.png" alt="file structure" width="100%" height="100%">
+        <img src="docs/file-structure-old.png" alt="file structure" width="100%" height="100%">
     </a>
 </p>
 
