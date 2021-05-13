@@ -1,4 +1,4 @@
-//package com.weeklyMenu.useCase.controllers;
+//package com.weeklyMenu.adaptor.controllers;
 //
 //
 //import com.jayway.restassured.RestAssured;

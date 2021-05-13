@@ -1,4 +1,4 @@
-//package com.weeklyMenu.useCase.controllers;
+//package com.weeklyMenu.adaptor.controllers;
 //
 //public class TestHelper {
 //    public static ProductDB createProduct(CategoryDB category) {

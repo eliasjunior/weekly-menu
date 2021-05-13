@@ -1,11 +1,12 @@
-//package com.weeklyMenu.useCase.controllers;
+//package com.weeklyMenu.adaptor.controllers;
 //
 //import com.jayway.restassured.RestAssured;
 //import com.jayway.restassured.http.ContentType;
+//import com.weeklyMenu.data.dataSource.CategoryRepository;
+//import com.weeklyMenu.useCase.common.GlobalConstant;
 //import org.junit.Before;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.boot.web.server.LocalServerPort;
 //import org.springframework.context.annotation.PropertySource;
@@ -16,14 +17,9 @@
 //@RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@PropertySource("test:application.properties")
-//public class RecipeDBControllerTest {
+//public class CategoryDBControllerTest {
 //    @LocalServerPort
 //    int randomServerPort;
-//    @Autowired
-//    ProductRepository productRepository;
-//
-//    @Autowired
-//    CategoryRepository categoryRepository;
 //
 //    @Before
 //    public void setup() {
@@ -31,31 +27,24 @@
 //    }
 //
 //    @Test
-//    public void get_all_recipes() {
+//    public void get_all_categories() {
 //        given()
 //                .contentType(ContentType.JSON)
-//                .get(GlobalConstant.BASE_URL + "/recipes")
+//                .get(GlobalConstant.BASE_URL + "/categories")
 //                .then()
 //                .statusCode(200);
 //    }
 //
 //    @Test
-//    public void post_recipe() {
-//        ProductDB product = productRepository.save(TestHelper.createProduct(TestHelper.createCategory(categoryRepository)));
-//        String recipeDto = "{\n" +
-//                "  \"name\": \"Orange Cake\"," +
-//                "  \"prodsDetail\": [\n" +
-//                        "{\n" +
-//                            "  \"prodId\": \""+product.getId() + "\"," +
-//                            "  \"quantity\": \"2\"" +
-//                        "}" +
-//                    "]" +
+//    public void post_category() {
+//        String categoryDto = "{\n" +
+//                "  \"name\": \"Norris\"" +
 //                "}";
 //        given()
 //                .contentType(ContentType.JSON)
-//                .body(recipeDto)
-//                .post(GlobalConstant.BASE_URL + "/recipes")
+//                .body(categoryDto)
+//                .post(GlobalConstant.BASE_URL + "/categories")
 //                .then()
-//                .statusCode(201);
+//                .statusCode(200);
 //    }
 //}

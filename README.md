@@ -85,8 +85,10 @@ as the code evolves I can come back and rethink  to add more layers as it need, 
 
 Data structure output and input are not implemented yet, for now I'm just passing the entities(domain) for simplicity
 
+### Data Source
 
-
+We could go even further in the data layer and decouple it completely 
+from the framework, but I'll leave like this for the moment.
 
 
 
