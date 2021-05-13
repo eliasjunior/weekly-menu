@@ -1,6 +1,6 @@
 package com.weeklyMenu.adaptor.gateway;
 
-import com.weeklyMenu.adaptor.SpringData.CartRepository;
+import com.weeklyMenu.adaptor.springData.CartRepository;
 import com.weeklyMenu.useCase.entity.Cart;
 import com.weeklyMenu.useCase.gateway.CartGateway;
 import com.weeklyMenu.adaptor.mapper.CartItemMapper;
@@ -8,7 +8,6 @@ import com.weeklyMenu.adaptor.mapper.CartMapper;
 import com.weeklyMenu.adaptor.model.CartDB;
 import com.weeklyMenu.useCase.exceptions.CustomValidationException;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

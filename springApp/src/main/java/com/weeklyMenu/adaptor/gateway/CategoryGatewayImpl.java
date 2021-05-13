@@ -1,12 +1,11 @@
 package com.weeklyMenu.adaptor.gateway;
 
-import com.weeklyMenu.adaptor.SpringData.CategoryRepository;
+import com.weeklyMenu.adaptor.springData.CategoryRepository;
 import com.weeklyMenu.useCase.gateway.CategoryGateway;
 import com.weeklyMenu.adaptor.model.CategoryDB;
 import com.weeklyMenu.useCase.entity.Category;
 import com.weeklyMenu.useCase.exceptions.CustomValidationException;
 import com.weeklyMenu.adaptor.mapper.InventoryMapper;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

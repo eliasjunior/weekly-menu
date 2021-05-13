@@ -1,11 +1,10 @@
 package com.weeklyMenu.adaptor.gateway;
 
-import com.weeklyMenu.adaptor.SpringData.ProductRepository;
+import com.weeklyMenu.adaptor.springData.ProductRepository;
 import com.weeklyMenu.useCase.gateway.ProductGateway;
 import com.weeklyMenu.adaptor.mapper.InventoryMapper;
 import com.weeklyMenu.adaptor.model.ProductDB;
 import com.weeklyMenu.useCase.entity.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

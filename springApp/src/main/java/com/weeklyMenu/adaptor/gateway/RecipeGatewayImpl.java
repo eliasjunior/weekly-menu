@@ -1,12 +1,11 @@
 package com.weeklyMenu.adaptor.gateway;
 
-import com.weeklyMenu.adaptor.SpringData.RecipeRepository;
+import com.weeklyMenu.adaptor.springData.RecipeRepository;
 import com.weeklyMenu.adaptor.mapper.RecipeMapper;
 import com.weeklyMenu.adaptor.model.RecipeDB;
 import com.weeklyMenu.useCase.entity.Recipe;
 import com.weeklyMenu.useCase.gateway.RecipeGateway;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

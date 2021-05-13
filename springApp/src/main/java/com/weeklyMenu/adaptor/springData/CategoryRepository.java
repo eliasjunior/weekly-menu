@@ -1,4 +1,4 @@
-package com.weeklyMenu.adaptor.SpringData;
+package com.weeklyMenu.adaptor.springData;
 
 import com.weeklyMenu.adaptor.model.CategoryDB;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,9 +1,9 @@
 package com.weeklyMenu.adaptor.config;
 
-import com.weeklyMenu.adaptor.SpringData.CartRepository;
-import com.weeklyMenu.adaptor.SpringData.CategoryRepository;
-import com.weeklyMenu.adaptor.SpringData.ProductRepository;
-import com.weeklyMenu.adaptor.SpringData.RecipeRepository;
+import com.weeklyMenu.adaptor.springData.CartRepository;
+import com.weeklyMenu.adaptor.springData.CategoryRepository;
+import com.weeklyMenu.adaptor.springData.ProductRepository;
+import com.weeklyMenu.adaptor.springData.RecipeRepository;
 import com.weeklyMenu.adaptor.gateway.CartGatewayImpl;
 import com.weeklyMenu.adaptor.gateway.CategoryGatewayImpl;
 import com.weeklyMenu.adaptor.gateway.ProductGatewayImpl;
