@@ -1,56 +1,52 @@
-//package com.weeklyMenu.useCase.data;
-//
-//import com.weeklyMenu.data.mapper.InventoryMapper;
-//import com.weeklyMenu.data.model.CategoryDB;
-//import com.weeklyMenu.data.model.ProductDB;
-//import com.weeklyMenu.entity.Category;
-//import com.weeklyMenu.entity.Product;
-//import com.weeklyMenu.gateway.CategoryGateway;
-//import com.weeklyMenu.gateway.RecipeGateway;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringRunner;
-//
-//import java.util.UUID;
-//
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-//public class InventoryTest {
-//    @Autowired
-//    CategoryGateway categoryDataAccess;
-//    @Autowired
-//    RecipeGateway recipeAccessData;
-//
-//    @Test
-//    public void testMapperDtoToEntity() {
-//        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
-//        Category categoryDTO = Category.builder().build();
-//        categoryDTO.setId(UUID.randomUUID().toString());
-//
-//        System.out.println(inventoryMapper.categoryToCategoryDB(categoryDTO));
-//
-//        Product productDTO = new Product();
-//        productDTO.setName("Sugar");
-//        productDTO.setCatId(categoryDTO.getId());
-//        System.out.println("&&&&& --> #################");
-//        System.out.println(inventoryMapper.productToProductDB(productDTO));
-//    }
-//
-//    @Test
-//    public void testMapperEntityToDto() {
-//        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
-//        ProductDB product = new ProductDB();
-//        product.setName("Sugar");
-//        product.setId("4321");
-//        product.setQuantityType("33");
-//
-//        CategoryDB category = new CategoryDB();
-//        category.setId("1234");
-//        product.setCategory(category);
-//
-//        System.out.println("&&&&& --> #################");
-//        System.out.println(inventoryMapper.productDBToProduct(product));
-//    }
-//}
+package com.weeklyMenu.adaptor.data;
+
+import com.weeklyMenu.adaptor.mapper.InventoryMapper;
+import com.weeklyMenu.adaptor.model.CategoryDB;
+import com.weeklyMenu.adaptor.model.ProductDB;
+import com.weeklyMenu.useCase.entity.Category;
+import com.weeklyMenu.useCase.entity.Product;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+public class InventoryTest {
+
+    @Test
+    public void testMapperDtoToEntity() {
+        String catId = UUID.randomUUID().toString();
+        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
+        Category category = Category.builder().build();
+        category.setId(catId);
+        CategoryDB categoryDB = inventoryMapper.categoryToCategoryDB(category);
+
+        assertEquals(categoryDB.getId(), category.getId());
+
+        Product product = new Product();
+        product.setName("Sugar");
+        product.setCatId(category.getId());
+
+        ProductDB productDB = inventoryMapper.productToProductDB(product);
+        assertEquals(productDB.getName(), "Sugar");
+        assertEquals(productDB.getCategory().getId(), product.getCatId());
+    }
+
+    @Test
+    public void testMapperEntityToDto() {
+        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
+        ProductDB productDB = new ProductDB();
+        productDB.setName("Sugar");
+        productDB.setId("4321");
+        productDB.setQuantityType("33");
+
+        CategoryDB categoryDB = new CategoryDB();
+        categoryDB.setId("1234");
+        productDB.setCategory(categoryDB);
+
+        Product product1 = inventoryMapper.productDBToProduct(productDB);
+        assertEquals(product1.getName(), "Sugar");
+        assertEquals(product1.getId(), "4321");
+        assertEquals(product1.getQuantityType(), "33");
+        assertEquals(product1.getCatId(), categoryDB.getId());
+    }
+}
