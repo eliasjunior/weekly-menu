@@ -20,13 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CartDBMapperTest {
     CartMapper CART_MAPPER = new CartMapperImpl();
+
     @Test
     public void testMapperDtoToEntity() {
         CartMapper MAPPER = new CartMapperImpl();
 
-        Cart domain = new Cart();
-        domain.setName("Today");
-        domain.setId(UUID.randomUUID().toString());
+        Cart domain = Cart.builder()
+                .name("today")
+                .id(UUID.randomUUID().toString())
+                .build();
 
         Set<String> recipes = new HashSet<>();
         String rec1 = "REC_ID_01";
@@ -40,7 +42,7 @@ public class CartDBMapperTest {
 
         domain.setCartItems(cartItems);
 
-        System.out.println("Cart #################, Items qtd="+domain.getCartItems().size());
+        System.out.println("Cart #################, Items qtd=" + domain.getCartItems().size());
         CartDB cartDB = MAPPER.cartToCartDB(domain);
 
         System.out.println(cartDB);
