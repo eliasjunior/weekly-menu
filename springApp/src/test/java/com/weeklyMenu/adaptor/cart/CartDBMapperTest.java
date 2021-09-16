@@ -1,6 +1,7 @@
 package com.weeklyMenu.adaptor.cart;
 
 import com.weeklyMenu.adaptor.mapper.CartMapper;
+import com.weeklyMenu.adaptor.mapper.CartMapperImpl;
 import com.weeklyMenu.adaptor.model.CartDB;
 import com.weeklyMenu.adaptor.model.CartItemDB;
 import com.weeklyMenu.adaptor.model.ProductDB;
@@ -18,10 +19,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CartDBMapperTest {
-    CartMapper CART_MAPPER = CartMapper.INSTANCE;
+    CartMapper CART_MAPPER = new CartMapperImpl();
     @Test
     public void testMapperDtoToEntity() {
-        CartMapper MAPPER = CartMapper.INSTANCE;
+        CartMapper MAPPER = new CartMapperImpl();
 
         Cart domain = new Cart();
         domain.setName("Today");

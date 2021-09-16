@@ -1,9 +1,6 @@
 package com.weeklyMenu.adaptor.config;
 
-import com.weeklyMenu.adaptor.mapper.CartItemMapper;
-import com.weeklyMenu.adaptor.mapper.CartMapper;
-import com.weeklyMenu.adaptor.mapper.InventoryMapper;
-import com.weeklyMenu.adaptor.mapper.RecipeMapper;
+import com.weeklyMenu.adaptor.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -42,14 +39,14 @@ public class BaseConfig {
 
     @Bean
     public InventoryMapper getInventoryMapper() {
-        return InventoryMapper.INSTANCE;
+        return new InventoryMapperImpl();
     }
     @Bean
     public CartMapper getCartMapper() {
-        return CartMapper.INSTANCE;
+        return new CartMapperImpl();
     }
     @Bean
     public RecipeMapper getRecipeMapper() {
-        return RecipeMapper.INSTANCE;
+        return new RecipeMapperImpl();
     }
 }

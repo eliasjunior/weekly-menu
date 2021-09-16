@@ -1,15 +1,13 @@
 package com.weeklyMenu.adaptor.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Table(name = "PROD_DETAIL")
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdDetailDB {

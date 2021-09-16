@@ -1,7 +1,9 @@
-package com.weeklyMene.adaptor;
+package com.weeklyMenu.adaptor;
 
 import com.weeklyMenu.adaptor.mapper.InventoryMapper;
+import com.weeklyMenu.adaptor.mapper.InventoryMapperImpl;
 import com.weeklyMenu.adaptor.mapper.RecipeMapper;
+import com.weeklyMenu.adaptor.mapper.RecipeMapperImpl;
 import com.weeklyMenu.adaptor.model.CategoryDB;
 import com.weeklyMenu.adaptor.model.ProductDB;
 import com.weeklyMenu.adaptor.model.RecipeDB;
@@ -21,7 +23,7 @@ public class BaseIntegration {
     private CategoryGateway categoryDataAccess;
     private RecipeRepository recipeRepository;
     private ProductRepository productRepository;
-    RecipeMapper RECIPE_MAPPER = RecipeMapper.INSTANCE;
+    RecipeMapper RECIPE_MAPPER = new RecipeMapperImpl();
     public BaseIntegration(CategoryGateway categoryDataAccess,
                            RecipeRepository recipeRepository,
                            ProductRepository productRepository) {
@@ -38,13 +40,13 @@ public class BaseIntegration {
     }
 
     public Product productFactory(String catId, String name, String id) {
-        InventoryMapper MAPPER = InventoryMapper.INSTANCE;
+        InventoryMapper MAPPER = new InventoryMapperImpl();
         ProductDB product = new ProductDB(id, name, "u", new CategoryDB(catId, null, null, null), null, null);
         return MAPPER.productDBToProduct(productRepository.save(product));
     }
 
     public Product createNewProductGivenCategory(String catId) {
-        InventoryMapper MAPPER = InventoryMapper.INSTANCE;
+        InventoryMapper MAPPER = new InventoryMapperImpl();
         ProductDB product = new ProductDB(UUID.randomUUID().toString(), "NoName", "u", new CategoryDB(catId, null, null, null), null, null);
         return MAPPER.productDBToProduct(productRepository.save(product));
     }

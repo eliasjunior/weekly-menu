@@ -1,6 +1,7 @@
 package com.weeklyMenu.adaptor.data;
 
 import com.weeklyMenu.adaptor.mapper.InventoryMapper;
+import com.weeklyMenu.adaptor.mapper.InventoryMapperImpl;
 import com.weeklyMenu.adaptor.model.CategoryDB;
 import com.weeklyMenu.adaptor.model.ProductDB;
 import com.weeklyMenu.useCase.entity.Category;
@@ -15,7 +16,7 @@ public class InventoryTest {
     @Test
     public void testMapperDtoToEntity() {
         String catId = UUID.randomUUID().toString();
-        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
+        InventoryMapper inventoryMapper = new InventoryMapperImpl();
         Category category = Category.builder().build();
         category.setId(catId);
         CategoryDB categoryDB = inventoryMapper.categoryToCategoryDB(category);
@@ -33,7 +34,7 @@ public class InventoryTest {
 
     @Test
     public void testMapperEntityToDto() {
-        InventoryMapper inventoryMapper = InventoryMapper.INSTANCE;
+        InventoryMapper inventoryMapper = new InventoryMapperImpl();
         ProductDB productDB = new ProductDB();
         productDB.setName("Sugar");
         productDB.setId("4321");
