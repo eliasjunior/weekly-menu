@@ -1,5 +1,9 @@
 package com.weeklyMenu.adaptor.config;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Objects;
+
 import com.weeklyMenu.adaptor.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,20 +15,21 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
 @Configuration
 public class BaseConfig {
-    @Value("${cors.allowed_host}")
-    private String [] hosts;
+    @Value("${client_cors_url.allowed_hosts}")
+    private URL[] hosts;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                final String [] HOSTS_ALLOWED = hosts;
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins(HOSTS_ALLOWED);
+                        .allowedOrigins(Arrays.stream(hosts)
+                        .filter(url -> !Objects.isNull(url))
+                        .map(url -> url.toString()).toArray(String[]::new));
             }
         };
     }
@@ -44,10 +49,12 @@ public class BaseConfig {
     public InventoryMapper getInventoryMapper() {
         return new InventoryMapperImpl();
     }
+
     @Bean
     public CartMapper getCartMapper() {
         return new CartMapperImpl();
     }
+
     @Bean
     public RecipeMapper getRecipeMapper() {
         return new RecipeMapperImpl();

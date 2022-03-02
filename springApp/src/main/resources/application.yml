@@ -22,5 +22,5 @@ logging:
     level:
         com:
             weeklyMenu: DEBUG
-cors:
-    allowed_host: [http://localhost:3001, https://weekly-menu-ui.herokuapp.com]
+client_cors_url:
+    allowed_hosts: http://localhost:3001, https://weekly-menu-ui.herokuapp.com      

@@ -7,6 +7,7 @@ import com.weeklyMenu.useCase.entity.Category;
 import com.weeklyMenu.useCase.exceptions.CustomValidationException;
 import com.weeklyMenu.adaptor.mapper.InventoryMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,11 +24,10 @@ public class CategoryGatewayImpl implements CategoryGateway {
     @Override
     public List<Category> getAllCategories() {
         List<Category> cats = mapper.categoriesDBToCategories(categoryRepository.findAll());
-        List<Category> withCatProds = cats
+        return cats
                 .stream()
                 .map(cat -> populateCatProds(cat))
                 .collect(Collectors.toList());
-        return withCatProds;
     }
 
     @Override
@@ -53,8 +53,11 @@ public class CategoryGatewayImpl implements CategoryGateway {
 
     @Override
     public Category getCategory(String id) {
-        return mapper
-                .categoryDBToCategory(categoryRepository.findById(id).get());
+        Optional<CategoryDB> optional = categoryRepository.findById(id);
+        if (optional.isPresent()) {
+            return mapper.categoryDBToCategory(optional.get());
+        }
+        return null;
     }
 
     @Override
@@ -70,18 +73,23 @@ public class CategoryGatewayImpl implements CategoryGateway {
     @Override
     public Optional<Category> findById(String id) {
         Optional<CategoryDB> optional = categoryRepository.findById(id);
-        return Optional.of(mapper.categoryDBToCategory(optional.get())) ;
+        return Optional.of(mapper.categoryDBToCategory(optional.get()));
     }
 
     private Category populateCatProds(Category cat) {
+
         try {
+            if (cat.getProducts() == null) {
+                cat.setProdIds(Collections.emptyList());
+                return cat;
+            }
             List<String> catProds = cat.getProducts()
                     .stream()
                     .map(prod -> prod.getId())
                     .collect(Collectors.toList());
             cat.setProdIds(catProds);
             return cat;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new CustomValidationException("Something went wrong while populating prod ids", e);
         }
     }
