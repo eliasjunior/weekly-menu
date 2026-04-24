@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 public class RecipeMapperImpl implements RecipeMapper {
     @Override
     public Recipe recipeDBToRecipe(RecipeDB recipeDB) {
+        if (recipeDB == null) {
+            return null;
+        }
         return Recipe
                 .builder().id(recipeDB.getId())
                 .name(recipeDB.getName())

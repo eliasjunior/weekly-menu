@@ -13,9 +13,10 @@ spring:
         console:
             enabled: true
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
         hibernate:
             ddl-auto: update
     output:
         ansi:
             enabled: always
+client_cors_url:
+    allowed_hosts: http://localhost:3001

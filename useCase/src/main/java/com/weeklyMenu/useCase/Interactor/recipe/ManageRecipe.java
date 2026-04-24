@@ -25,6 +25,7 @@ public class ManageRecipe {
         recipeValidator.validateRecipe(recipe);
         recipeValidator.validateRecipeWithProducts(recipe);
         recipe.setId(idGenerator.generateId());
+        generateItemsIds(idGenerator, recipe);
         return recipeGateway.create(recipe);
     }
 

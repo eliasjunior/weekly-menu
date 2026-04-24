@@ -26,6 +26,11 @@ class RecipeMapperImplTest {
     }
 
     @Test
+    void testConvertNullRecipeDBToRecipe() {
+        assertNull(recipeMapper.recipeDBToRecipe(null));
+    }
+
+    @Test
     void testConvertRecipeToRecipeDB() {
         Recipe recipe = createRecipe("cake", "123");
         RecipeDB recipeDB = recipeMapper.recipeToRecipeDB(recipe);
