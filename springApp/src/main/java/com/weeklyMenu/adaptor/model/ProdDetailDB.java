@@ -2,7 +2,7 @@ package com.weeklyMenu.adaptor.model;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "PROD_DETAIL")
 @Entity
@@ -29,5 +29,6 @@ public class ProdDetailDB {
     private ProductDB product;
 
     @Embedded
+    @Builder.Default
     private BasicEntity basicEntity = new BasicEntity();
 }

@@ -22,14 +22,13 @@ Content-Type: application/json
 
 ###
 
-PUT  http://localhost:8082/v1/category
+PUT  http://localhost:8082/v1/categories
 Content-Type: application/json
 
 {
   "name": "Carrot",
-  "catProds": ["641a9e26-d20a-4d49-9c04-2cbfc8514fbe"],
+  "prodIds": ["641a9e26-d20a-4d49-9c04-2cbfc8514fbe"],
   "id": "472c62df-682d-4540-b2d4-e37383282e7e"
 }
 
 ###
-

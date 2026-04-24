@@ -58,7 +58,7 @@ public class RecipeController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         manageRecipe.remove(id);
         return ResponseEntity.noContent().build();

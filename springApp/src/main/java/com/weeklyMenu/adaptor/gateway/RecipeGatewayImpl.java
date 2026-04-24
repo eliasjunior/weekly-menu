@@ -23,7 +23,7 @@ public class RecipeGatewayImpl implements RecipeGateway {
 
     @Override
     public Optional<Recipe> findById(String id) {
-        return Optional.empty();
+        return recipeRepository.findById(id).map(mapper::recipeDBToRecipe);
     }
 
     @Override

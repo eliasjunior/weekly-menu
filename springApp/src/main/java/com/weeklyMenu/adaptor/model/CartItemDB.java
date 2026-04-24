@@ -2,8 +2,8 @@ package com.weeklyMenu.adaptor.model;
 
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -23,8 +23,8 @@ public class CartItemDB {
     @Column(name = "NAME")
     private String name;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "PROD_ID", referencedColumnName = "ID", unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PROD_ID", referencedColumnName = "ID")
     private ProductDB product;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +42,7 @@ public class CartItemDB {
     private Set<RecipeDB> selectedRecipes;
 
     @Embedded
+    @Builder.Default
     private BasicEntity basicEntity = new BasicEntity();
 
     public void updateBasic(CartItemDB itemDB) {

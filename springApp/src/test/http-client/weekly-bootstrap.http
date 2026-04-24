@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/v1/categories
+POST http://localhost:8082/v1/categories
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 > {% client.global.set("catId",  response.body.id);  %}
 
 ###
-POST http://localhost:8080/v1/products
+POST http://localhost:8082/v1/products
 Content-Type: application/json
 
 {   "name": "Water",   "quantityType": "2",   "catId": "{{catId}}" }
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/v1/recipes
+POST http://localhost:8082/v1/recipes
 Content-Type: application/json
 
 {
@@ -35,21 +35,20 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/v1/cart
+POST http://localhost:8082/v1/carts
 Content-Type: application/json
 
 {
   "name": "Today",
-  "cartItemDBS": [
+  "cartItems": [
     {
       "id": "1",
       "prodId": "{{prodId}}",
-      "recipes": [{"id":"{{recId}}"}],
+      "recipes": ["{{recId}}"],
       "selected": true
     }
   ]
 }
-
 
 
 

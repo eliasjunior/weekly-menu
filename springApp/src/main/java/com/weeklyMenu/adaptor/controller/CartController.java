@@ -42,7 +42,7 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         manageCart.remove(id);
         return ResponseEntity.noContent().build();

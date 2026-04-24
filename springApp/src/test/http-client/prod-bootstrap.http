@@ -6,7 +6,7 @@ Content-Type: application/json
 
 > {%
 client.test("POST product executed successfully", function() {
-      client.assert(response.status === 200, "POST response status is not 200");
+      client.assert(response.status === 201, "POST response status is not 201");
 });
 %}
 

@@ -76,6 +76,16 @@ class InventoryMapperImplTest {
     }
 
     @Test
+    void testConvertNullCategoryDBToCategory() {
+        assertNull(inventoryMapper.categoryDBToCategory(null));
+    }
+
+    @Test
+    void testConvertNullProductDBToProduct() {
+        assertNull(inventoryMapper.productDBToProduct(null));
+    }
+
+    @Test
     void testConvertCategoryToCategoryDB() {
         Category category = Category.builder().id("A").name("Mellon").build();
 

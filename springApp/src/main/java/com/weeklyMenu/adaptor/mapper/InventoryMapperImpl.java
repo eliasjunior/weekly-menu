@@ -20,6 +20,9 @@ public class InventoryMapperImpl implements InventoryMapper {
 
     @Override
     public Product productDBToProduct(ProductDB entity) {
+        if (entity == null) {
+            return null;
+        }
         return Product.builder().id(entity.getId())
                 .id(entity.getId())
                 .name(entity.getName())
@@ -38,6 +41,9 @@ public class InventoryMapperImpl implements InventoryMapper {
 
     @Override
     public Category categoryDBToCategory(CategoryDB entity) {
+        if (entity == null) {
+            return null;
+        }
         return Category.builder()
                 .id(entity.getId())
                 .name(entity.getName())

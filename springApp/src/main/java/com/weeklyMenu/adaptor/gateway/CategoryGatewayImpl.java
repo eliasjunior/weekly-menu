@@ -73,7 +73,7 @@ public class CategoryGatewayImpl implements CategoryGateway {
     @Override
     public Optional<Category> findById(String id) {
         Optional<CategoryDB> optional = categoryRepository.findById(id);
-        return Optional.of(mapper.categoryDBToCategory(optional.get()));
+        return optional.map(mapper::categoryDBToCategory);
     }
 
     private Category populateCatProds(Category cat) {

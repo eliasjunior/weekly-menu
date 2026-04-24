@@ -60,7 +60,7 @@ public class CategoryController {
         manageCategory.edit(categoryWeb.toCategory());
         return ResponseEntity.noContent().build();
     }
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         manageCategory.remove(id);
         return ResponseEntity.noContent().build();

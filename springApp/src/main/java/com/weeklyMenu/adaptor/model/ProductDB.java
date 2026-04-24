@@ -2,8 +2,8 @@ package com.weeklyMenu.adaptor.model;
 
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -38,6 +38,7 @@ public class ProductDB {
     private List<ProdDetailDB> prodsDetail;
 
     @Embedded
+    @Builder.Default
     private BasicEntity basicEntity = new BasicEntity();
 
     public void updateBasic(BasicEntity basicEntity) {

@@ -66,6 +66,6 @@ public class ProductGatewayImpl implements ProductGateway {
     @Override
     public Optional<Product> findById(String id) {
         Optional<ProductDB> optional = productRepository.findById(id);
-        return Optional.of(mapper.productDBToProduct(optional.get()));
+        return optional.map(mapper::productDBToProduct);
     }
 }
